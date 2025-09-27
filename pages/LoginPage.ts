@@ -30,6 +30,5 @@ export class LoginPage{
         const message = await this.message.textContent();
         console.log(message);
         return await expect(this.message).toBeVisible();
-       
     }
 }

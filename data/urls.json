@@ -1,0 +1,25 @@
+{
+  "env": "test",
+
+  "webApp": "https://webapp.test.deliveree.com",
+  "webAppSignin": "https://webapp.test.deliveree.com/customers/sign_in",
+  "webAppSignup": "https://webapp.test.deliveree.com/customers/sign_up",
+
+  "wallee": "https://wallee.test.deliveree.com",
+  "authDeliveree": "https://auth.test.deliveree.com/staffs/sign_in",
+  "authDelivereeApiV1": "https://auth.test.deliveree.com/api/v1/staffs/sign_in",
+  "authDelivereeApiV2": "https://auth.test.deliveree.com/api/v2/authentications/token",
+  "walleeFTL": "https://wallee.test.deliveree.com/ftl",
+  "walleeLCLBookings": "https://wallee.test.deliveree.com/lcl/bookings",
+
+  "fleet": "https://fleetv2.test.deliveree.com",
+  "fleetSignin": "https://fleetv2.test.deliveree.com/login",
+
+  "webAdmin": "https://admin.test.deliveree.com",
+  "webAdminSignin": "https://admin.test.deliveree.com/staffs/sign_in",
+  "webAdminBookings": "https://admin.test.deliveree.com/bookings",
+  "webAdminSettings": "https://admin.test.deliveree.com/settings",
+
+  "api": "https://api.test.deliveree.com",
+  "apiEndpoint": "public_api/v10/deliveries"
+}
