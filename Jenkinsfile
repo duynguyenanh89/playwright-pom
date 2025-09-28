@@ -1,65 +1,59 @@
 pipeline {
-    agent {
-        docker {
-            image 'mcr.microsoft.com/playwright:v1.40.0-jammy'
-            args '--cap-add=SYS_ADMIN' // Required for xvfb in headless mode
-        }
-    }
-    environment {
-        CI = 'true' // Enable CI mode for Playwright
-        HOME = "${WORKSPACE}" // Avoid permission issues with HOME
-    }
-    parameters {
-        choice(name: 'TEST_SUITE', choices: ['all', 'smoke', 'regression'], description: 'Select test suite to run')
+    agent any
+    tools {
+        nodejs 'NodeJS_24.9.0' // Tên phiên bản Node.js được cấu hình trong Global Tool Configuration
+        allure 'Allure_2.35.1' // Tên Allure được cấu hình trong Global Tool Configuration
     }
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], 
+                          userRemoteConfigs: [[url: 'https://github.com/duynguyenanh89/playwright-pom']],
+                          extensions: [[$class: 'CloneOption', shallow: true, depth: 1]]])
             }
         }
-        stage('Install') {
+        stage('Run Playwright Tests') {
             steps {
-                sh 'npm ci' // Deterministic dependency installation
-                sh 'npx playwright install --with-deps' // Install browsers and dependencies
-            }
-        }
-        stage('Test') {
-            steps {
-                script {
-                    def testCommand = "npx playwright test --workers=4" // Run with 4 parallel workers
-                    if (params.TEST_SUITE != 'all') {
-                        testCommand += " --grep @${params.TEST_SUITE}" // Filter by test suite tag
-                    }
-                    sh testCommand
-                }
-            }
-        }
-        stage('Generate Report') {
-            steps {
-                sh 'npx playwright show-report' // Generate HTML report
+                sh 'bash scripts/run-tests.sh' // Call shell script
             }
         }
     }
     post {
         always {
-            junit 'test-results/**/*.xml' // Publish JUnit results
-            archiveArtifacts artifacts: 'test-results/**, playwright-report/**', allowEmptyArchive: true
-            publishHTML(target: [
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'playwright-report',
-                reportFiles: 'index.html',
-                reportName: 'Playwright Test Report'
+        //     // Keep source code, remove unnecessary folder/files
+        //     //sh 'rm -rf playwright-report test-results allure-results'
+            allure([
+                includeProperties: false,
+                jdk: '',
+                results: [[path: 'allure-results']],
+                reportBuildPolicy: 'ALWAYS'  
             ])
-            cleanWs() // Clean workspace to save space
         }
         success {
-            echo 'Tests completed successfully!'
+            script {
+                def message = """
+                {
+                    "text": "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nView Details: ${env.BUILD_URL}"
+                }
+                """
+                // httpRequest contentType: 'APPLICATION_JSON', 
+                //              httpMode: 'POST', 
+                //              requestBody: message, 
+                //              url: 'https://chat.googleapis.com/v1/spaces/AAQA-Iaj1-s/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=GL57ujfXoSYdvCa3qd9m39L-6rjWwxcxZUlRNIqQ7Ck'
+            }
         }
         failure {
-            echo 'Test failures detected. Check reports and artifacts.'
+            script {
+                def message = """
+                {
+                    "text": "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nView Details: ${env.BUILD_URL}"
+                }
+                """
+                // httpRequest contentType: 'APPLICATION_JSON', 
+                //              httpMode: 'POST', 
+                //              requestBody: message, 
+                //              url: 'https://chat.googleapis.com/v1/spaces/AAQA-Iaj1-s/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=GL57ujfXoSYdvCa3qd9m39L-6rjWwxcxZUlRNIqQ7Ck'
+            }
         }
     }
 }
