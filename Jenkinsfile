@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'mcr.microsoft.com/playwright:v1.55.0-noble'  // Use a specific version for reproducibility; update as needed
+            image 'mcr.microsoft.com/playwright:v1.55.0-noble'  // Use a specific version for reproducibility
             args '--shm-size=1g'  // Increase shared memory for browser stability
         }
     }
@@ -18,7 +18,7 @@ pipeline {
         stage('Run Playwright Tests') {
             steps {
                 echo "Running Playwright tests..."
-                sh 'npx playwright test --project=chromium'  // Run on Chromium; add --headed for debugging (not recommended in CI)
+                sh 'npx playwright test --project=chromium'  // Run on Chromium
             }
             post {
                 always {
@@ -40,8 +40,12 @@ pipeline {
     
     post {
         always {
-            // Clean up workspace if needed
-            cleanWs()
+            script {
+                // Ensure cleanWs runs in the Docker agent context
+                node('') {  // Reuse the pipeline's Docker agent
+                    cleanWs()
+                }
+            }
         }
         success {
             echo "All tests passed! 🎉"
