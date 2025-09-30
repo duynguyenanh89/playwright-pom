@@ -1,9 +1,9 @@
 pipeline {
-    agent {
-        docker {
-            image 'mcr.microsoft.com/playwright:v1.55.0-noble'  // Use a specific version for reproducibility
-            args '--shm-size=1g'  // Increase shared memory for browser stability
-        }
+    agent any {
+        // docker {
+        //     image 'mcr.microsoft.com/playwright:v1.55.0-noble'  // Use a specific version for reproducibility
+        //     args '--shm-size=1g'  // Increase shared memory for browser stability
+        // }
     }
     
     stages {
