@@ -1,17 +1,18 @@
 pipeline {
+    environment {
+        PATH = "/opt/homebrew/bin:$PATH"
+        PATH = "/usr/local/bin/docker"
+    }
     agent {
         docker {
             image 'mcr.microsoft.com/playwright:v1.55.0-noble'  // Use a specific version for reproducibility
             args '--shm-size=1g'  // Increase shared memory for browser stability
         }
     }
-    environment {
-        PATH = "/opt/homebrew/bin:$PATH"
-    }
     stages {
         stage('Debug Environment') {
             steps {
-                sh 'echo $PATH'
+                sh 'echo PATH: $PATH'
                 sh 'which npm || true'
             }
         }
