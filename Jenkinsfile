@@ -13,8 +13,10 @@ pipeline {
     stages {
         stage('Debug Environment') {
             steps {
-                sh 'echo PATH: $PATH'
-                sh 'which npm || true'
+                sh 'echo $PATH'
+                sh 'which docker || echo "Docker not found"'
+                sh 'docker --version || echo "Docker version failed"'
+                sh 'npm --version || echo "npm not needed in Docker agent"'
             }
         }
         stage('Install Dependencies') {
