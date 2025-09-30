@@ -7,6 +7,12 @@ pipeline {
     //}
     
     stages {
+        stage('Debug Environment') {
+            steps {
+                sh 'echo $PATH'
+                sh 'which npm || true'
+            }
+}
         stage('Install Dependencies') {
             steps {
                 echo "Installing npm dependencies..."
