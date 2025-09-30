@@ -2,7 +2,7 @@ pipeline {
     environment {
         // PATH = "/opt/homebrew/bin:$PATH" //npm path
         // PATH = "/usr/local/bin/docker" // docker path
-        PATH = "/opt/homebrew/bin:/usr/local/bin/docker:$PATH" //combined path
+        PATH = "/opt/homebrew/bin:/usr/local/bin/docker:$PATH" //combined 2 pathes
     }
     agent any
     // agent {
@@ -14,10 +14,18 @@ pipeline {
     stages {
         stage('Debug Environment') {
             steps {
-                sh 'echo $PATH'
-                sh 'which docker || echo "Docker not found"'
-                sh 'docker --version || echo "Docker version failed"'
-                sh 'npm --version || echo "npm not needed in Docker agent"'
+                // Verify npm and docker are accessible
+                echo "--------------------------------"
+                echo "NPM path and version:"
+                sh 'which npm'
+                sh 'npm --version'
+                echo "--------------------------------"
+
+                echo "--------------------------------"
+                echo "Docker path and version:"
+                sh 'which docker'
+                sh 'docker --version'
+                echo "--------------------------------"
             }
         }
         stage('Install Dependencies') {
