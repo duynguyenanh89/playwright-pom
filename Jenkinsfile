@@ -1,7 +1,8 @@
 pipeline {
     environment {
-        PATH = "/opt/homebrew/bin:$PATH"
-        PATH = "/usr/local/bin/docker"
+        // PATH = "/opt/homebrew/bin:$PATH" //npm path
+        // PATH = "/usr/local/bin/docker" // docker path
+        PATH = "/opt/homebrew/bin:/usr/local/bin:$PATH" //combined path
     }
     agent {
         docker {
