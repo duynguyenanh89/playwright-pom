@@ -4,12 +4,13 @@ pipeline {
         // PATH = "/usr/local/bin/docker" // docker path
         PATH = "/opt/homebrew/bin:/usr/local/bin:$PATH" //combined path
     }
-    agent {
-        docker {
-            image 'mcr.microsoft.com/playwright:v1.55.0-noble'  // Use a specific version for reproducibility
-            args '--shm-size=1g'  // Increase shared memory for browser stability
-        }
-    }
+    agent any
+    // agent {
+    //     docker {
+    //         image 'mcr.microsoft.com/playwright:v1.55.0-noble'  // Use a specific version for reproducibility
+    //         args '--shm-size=1g'  // Increase shared memory for browser stability
+    //     }
+    // }
     stages {
         stage('Debug Environment') {
             steps {
