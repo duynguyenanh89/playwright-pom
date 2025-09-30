@@ -30,17 +30,14 @@ pipeline {
             }
             post {
                 always {
-                    // Archive test results and reports for Jenkins UI
-                    archiveArtifacts artifacts: 'playwright-report/**, test-results/**, *.png', allowEmptyArchive: true
-                    // Publish HTML report if using Playwright's built-in reporter
-                    publishHTML([
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: 'playwright-report',
-                        reportFiles: 'index.html',
-                        reportName: 'Playwright Report'
-                    ])
+                //     // Keep source code, remove unnecessary folder/files
+                //     //sh 'rm -rf playwright-report test-results allure-results'
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: 'allure-results']],
+                    reportBuildPolicy: 'ALWAYS'  
+                ])
                 }
             }
         }
