@@ -5,14 +5,16 @@ pipeline {
         //     args '--shm-size=1g'  // Increase shared memory for browser stability
         // }
     //}
-    
+    environment {
+        PATH = "/opt/homebrew/bin:$PATH"
+    }
     stages {
         stage('Debug Environment') {
             steps {
                 sh 'echo $PATH'
                 sh 'which npm || true'
             }
-}
+        }
         stage('Install Dependencies') {
             steps {
                 echo "Installing npm dependencies..."
@@ -20,7 +22,7 @@ pipeline {
                 sh 'npx playwright install --with-deps'  // Install Playwright browsers and system deps
             }
         }
-        
+    
         stage('Run Playwright Tests') {
             steps {
                 echo "Running Playwright tests..."
