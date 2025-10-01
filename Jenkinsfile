@@ -18,7 +18,7 @@ pipeline {
                 echo "--------------------------------"
                 echo $PATH
                 which npm
-                npm --version
+                npm -- version
                 echo "--------------------------------"
 
                 echo "--------------------------------"
