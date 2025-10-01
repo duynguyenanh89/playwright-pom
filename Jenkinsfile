@@ -41,12 +41,12 @@ pipeline {
         stage('Run Playwright Tests') {
             steps {
                 echo "Running Playwright tests..."
-                sh 'npx playwright test --project=chromium'  // Run on Chromium
+                sh 'npx playwright test' 
             }
             post {
                 always {
-                //     // Keep source code, remove unnecessary folder/files
-                //     //sh 'rm -rf playwright-report test-results allure-results'
+                    // Keep source code, remove unnecessary folder/files
+                    sh 'rm -rf playwright-report test-results allure-results'
                 allure([
                     includeProperties: false,
                     jdk: '',
