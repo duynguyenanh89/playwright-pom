@@ -4,6 +4,10 @@ pipeline {
     //     // PATH = "/usr/local/bin/docker" // docker path
     //     //PATH = "/opt/homebrew/bin/npm:/usr/local/bin/docker:$PATH" //combined 2 pathes
     // }
+
+    tools {
+        nodejs 'NodeJS_24.1.0'  // Ensure Node.js is available
+    }
     agent any
     // agent {
     //     docker {
@@ -12,20 +16,19 @@ pipeline {
     //     }
     // }
     stages {
-        stage('Debug Environment') {
+        stage('Check npm/Node Setup') {
             steps {
-                // Verify npm and docker are accessible
-                echo "--------------------------------"
-                echo $PATH
-                sh 'which npm'
-                sh 'npm --version'
-                echo "--------------------------------"
-
-                echo "--------------------------------"
-                echo "Docker path and version:"
-                sh 'which docker'
-                sh 'docker --version'
-                echo "--------------------------------"
+                script {
+                    // Echo environment details for debugging
+                    sh 'echo "Current user: $(whoami)"'
+                    sh 'echo "PATH: $PATH"'
+                    sh 'echo "Node version:"'
+                    sh 'node --version'
+                    sh 'echo "npm version:"'
+                    sh 'npm --version'
+                    sh 'echo "npm location:"'
+                    sh 'which npm || echo "npm not in PATH"'
+                }
             }
         }
         stage('Install Dependencies') {
