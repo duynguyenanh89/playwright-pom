@@ -17,8 +17,8 @@ pipeline {
                 // Verify npm and docker are accessible
                 echo "--------------------------------"
                 echo $PATH
-                which npm
-                npm -- version
+                sh 'which npm'
+                sh 'npm --version'
                 echo "--------------------------------"
 
                 echo "--------------------------------"
