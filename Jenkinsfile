@@ -25,8 +25,8 @@ pipeline {
                     sh 'npm --version'
                     sh 'echo "npm location:"'
                     sh 'which npm || echo "npm not in PATH"'
-                    sh 'echo "Docker version:"'
-                    sh 'docker --version'
+                    // sh 'echo "Docker version:"'
+                    // sh 'docker --version'
                 }
             }
         }
