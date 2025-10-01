@@ -1,9 +1,9 @@
 pipeline {
-    environment {
-        PATH = "/opt/homebrew/bin/npm" //npm path
-        // PATH = "/usr/local/bin/docker" // docker path
-        //PATH = "/opt/homebrew/bin/npm:/usr/local/bin/docker:$PATH" //combined 2 pathes
-    }
+    // environment {
+    //     PATH = "/opt/homebrew/bin/npm" //npm path
+    //     // PATH = "/usr/local/bin/docker" // docker path
+    //     //PATH = "/opt/homebrew/bin/npm:/usr/local/bin/docker:$PATH" //combined 2 pathes
+    // }
     agent any
     // agent {
     //     docker {
@@ -16,9 +16,9 @@ pipeline {
             steps {
                 // Verify npm and docker are accessible
                 echo "--------------------------------"
-                echo "NPM path and version:"
-                sh 'which npm'
-                sh 'npm --version'
+                echo "echo "The path is: "  $PATH
+                        which npm
+                        npm --version"
                 echo "--------------------------------"
 
                 echo "--------------------------------"
