@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        PATH = "/opt/homebrew/bin/npm" //npm path
+        PATH = "/opt/homebrew/bin/npm:$PATH" //npm path
         // PATH = "/usr/local/bin/docker" // docker path
         //PATH = "/opt/homebrew/bin/npm:/usr/local/bin/docker:$PATH" //combined 2 pathes
     }
