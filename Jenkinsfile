@@ -3,7 +3,7 @@ pipeline {
         nodejs 'NodeJS_24.1.0'
     }
     // agent any
-    // agent {
+    agent {
         docker {
             // image 'mcr.microsoft.com/playwright:v1.55.0-noble'  // Use a specific version for reproducibility
             // args '--shm-size=1g'  // Increase shared memory for browser stability
