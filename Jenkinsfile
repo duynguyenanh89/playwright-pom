@@ -16,6 +16,9 @@ pipeline {
     stages {
         stage('Check Host Docker') {
             agent { label 'master' }  // Run on localhost (master node)
+            environment {
+                PATH = "/usr/local/bin/docker:$PATH"  // Adjust if docker is elsewhere
+            }
             steps {
                 script {
                     // Verify Docker CLI and daemon on host
