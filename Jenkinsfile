@@ -3,15 +3,15 @@ pipeline {
         nodejs 'NodeJS_24.1.0'
         //dockerTool 'Docker_latest_version'  // Name from Tools config
     }
-    // agent any
-    agent {
-        docker {
-            // image 'mcr.microsoft.com/playwright:v1.55.0-noble'  // Use a specific version for reproducibility
-            // args '--shm-size=1g'  // Increase shared memory for browser stability
-            image 'node:18'  // Official Node.js image with npm pre-installed
-            args '-u root'   // Run as root to avoid permission issues
-        }
-    }
+    agent any
+    // agent {
+    //     docker {
+    //         // image 'mcr.microsoft.com/playwright:v1.55.0-noble'  // Use a specific version for reproducibility
+    //         // args '--shm-size=1g'  // Increase shared memory for browser stability
+    //         image 'node:18'  // Official Node.js image with npm pre-installed
+    //         args '-u root'   // Run as root to avoid permission issues
+    //     }
+    // }
     stages {
         stage('Check npm/Node Setup') {
             steps {
