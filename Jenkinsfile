@@ -16,9 +16,9 @@ pipeline {
             steps {
                 // Verify npm and docker are accessible
                 echo "--------------------------------"
-                echo "echo $PATH
-                        which npm
-                        npm --version"
+                echo $PATH
+                which npm
+                npm --version
                 echo "--------------------------------"
 
                 echo "--------------------------------"
