@@ -1,20 +1,15 @@
 pipeline {
-    // environment {
-    //     PATH = "/opt/homebrew/bin/npm" //npm path
-    //     // PATH = "/usr/local/bin/docker" // docker path
-    //     //PATH = "/opt/homebrew/bin/npm:/usr/local/bin/docker:$PATH" //combined 2 pathes
-    // }
-
     tools {
-        nodejs 'NodeJS_24.1.0'  // Ensure Node.js is available
+        nodejs 'NodeJS_24.1.0'
+        dockerTool 'Docker_latest_version'  // Name from Tools config
     }
-    agent any
-    // agent {
-    //     docker {
-    //         image 'mcr.microsoft.com/playwright:v1.55.0-noble'  // Use a specific version for reproducibility
-    //         args '--shm-size=1g'  // Increase shared memory for browser stability
-    //     }
-    // }
+    //agent any
+    agent {
+        docker {
+            image 'mcr.microsoft.com/playwright:v1.55.0-noble'  // Use a specific version for reproducibility
+            args '--shm-size=1g'  // Increase shared memory for browser stability
+        }
+    }
     stages {
         stage('Check npm/Node Setup') {
             steps {
