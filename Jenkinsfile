@@ -11,7 +11,7 @@ pipeline {
             image 'node:18'  // Official Node.js image with npm pre-installed
             args '-u root'   // Run as root to avoid permission issues
         }
-    // }
+    }
     stages {
         stage('Check npm/Node Setup') {
             steps {
