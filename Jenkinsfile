@@ -29,7 +29,7 @@ pipeline {
             post {
                 always {
                     // Keep source code, remove unnecessary folder/files
-                    sh 'rm -rf playwright-report test-results allure-results'
+                    // sh 'rm -rf playwright-report test-results allure-results'
                 allure([
                     includeProperties: false,
                     jdk: '',
