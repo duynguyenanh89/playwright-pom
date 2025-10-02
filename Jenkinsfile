@@ -1,8 +1,8 @@
 pipeline {
     tools {
-        nodejs 'NodeJS_24.1.0'
+        nodejs 'NodeJS_24.1.0' 
     }
-    agent none
+    agent any
 
     // agent {
     //     docker {
@@ -29,24 +29,24 @@ pipeline {
             }
         }
 
-        stage('Check npm/Node in Docker') {
-            agent {
-                docker {
-                    image 'node:18'  // Node.js 18 with npm
-                    args '-u root'   // Avoid permission issues
-                }
-            }
-            steps {
-                script {
-                    // Verify npm/Node in container
-                    sh 'echo "Container user: $(whoami)"'
-                    sh 'echo "Container PATH: $PATH"'
-                    sh 'node --version'
-                    sh 'npm --version'
-                    sh 'which npm || echo "npm not in PATH"'
-                }
-            }
-        }
+        // stage('Check npm/Node in Docker') {
+        //     agent {
+        //         docker {
+        //             image 'node:18'  // Node.js 18 with npm
+        //             args '-u root'   // Avoid permission issues
+        //         }
+        //     }
+        //     steps {
+        //         script {
+        //             // Verify npm/Node in container
+        //             sh 'echo "Container user: $(whoami)"'
+        //             sh 'echo "Container PATH: $PATH"'
+        //             sh 'node --version'
+        //             sh 'npm --version'
+        //             sh 'which npm || echo "npm not in PATH"'
+        //         }
+        //     }
+        // }
 
         stage('Install Dependencies') {
             steps {
