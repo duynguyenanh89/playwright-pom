@@ -39,10 +39,10 @@ pipeline {
                 script {
                         sh 'docker run -it --rm --ipc=host mcr.microsoft.com/playwright:v1.55.0-noble /bin/bash'
                         sh 'npx playwright test'
-                    }
                 }
             }
         }
+        
     
         // stage('Run Playwright Tests') {
         //     agent {
