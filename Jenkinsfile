@@ -2,16 +2,22 @@ pipeline {
     tools {
         nodejs 'NodeJS_24.1.0'
     }
-    // agent any
+    agent any
 
-    agent {
-        docker {
-            image 'mcr.microsoft.com/playwright:v1.55.1-noble'
-            args '--ipc=host'
-        }
-    }
+    // agent {
+    //     docker {
+    //         image 'mcr.microsoft.com/playwright:v1.55.1-noble'
+    //         args '--ipc=host'
+    //     }
+    // }
 
     stages {
+        stage('Check Docker') {
+            steps {
+                sh 'docker --version'
+                sh 'docker info'
+            }
+}
         stage('Install Dependencies') {
             steps {
                 echo "Installing npm dependencies..."
