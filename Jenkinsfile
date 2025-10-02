@@ -33,33 +33,46 @@ pipeline {
                 sh 'npx playwright install --with-deps'  // Install Playwright browsers and system deps
             }
         }
-    
+
         stage('Run Playwright Tests') {
-            agent {
-                docker {
-                    image 'mcr.microsoft.com/playwright:v1.55.1-noble'
-                    args '--ipc=host'
-                }
+            environment {
+                PATH = "/Applications/Docker.app/Contents/Resources/bin:$PATH"
             }
             steps {
-                echo  "-----------------------------------------------------------------"
-                echo  "Start running Playwright ......."
-                echo  "-----------------------------------------------------------------"
-                sh 'npx playwright test' 
-            }
-            post {
-                always {
-                    // Keep source code, remove unnecessary folder/files
-                    // sh 'rm -rf playwright-report test-results allure-results'
-                allure([
-                    includeProperties: false,
-                    jdk: '',
-                    results: [[path: 'allure-results']],
-                    reportBuildPolicy: 'ALWAYS'  
-                ])
+                script {
+                    docker.image('mcr.microsoft.com/playwright:v1.55.1-noble').inside {
+                        sh 'npx playwright test'
+                    }
                 }
             }
         }
+    
+        // stage('Run Playwright Tests') {
+        //     agent {
+        //         docker {
+        //             image 'mcr.microsoft.com/playwright:v1.55.1-noble'
+        //             args '--ipc=host'
+        //         }
+        //     }
+        //     steps {
+        //         echo  "-----------------------------------------------------------------"
+        //         echo  "Start running Playwright ......."
+        //         echo  "-----------------------------------------------------------------"
+        //         sh 'npx playwright test' 
+        //     }
+        //     post {
+        //         always {
+        //             // Keep source code, remove unnecessary folder/files
+        //             // sh 'rm -rf playwright-report test-results allure-results'
+        //         allure([
+        //             includeProperties: false,
+        //             jdk: '',
+        //             results: [[path: 'allure-results']],
+        //             reportBuildPolicy: 'ALWAYS'  
+        //         ])
+        //         }
+        //     }
+        // }
     }
     
     post {
