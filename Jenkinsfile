@@ -35,11 +35,10 @@ pipeline {
         }
 
         stage('Run Playwright Tests') {
-            environment {
-                PATH = "/Applications/Docker.app/Contents/Resources/bin:$PATH"
-            }
             steps {
                 script {
+                    sh 'docker --version'
+                    sh 'docker info'
                     docker.image('mcr.microsoft.com/playwright:v1.55.1-noble').inside {
                         sh 'npx playwright test'
                     }
