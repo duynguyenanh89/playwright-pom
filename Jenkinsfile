@@ -4,6 +4,10 @@ pipeline {
     }
     agent any
 
+    environment {
+        DOCKER_HOST = 'unix:///var/run/docker.sock'
+    }
+
     // agent {
     //     docker {
     //         image 'mcr.microsoft.com/playwright:v1.55.1-noble'
@@ -18,7 +22,7 @@ pipeline {
                 sh 'docker info'
             }
         }
-        
+
         stage('Install Dependencies') {
             steps {
                 echo "Installing npm dependencies..."
