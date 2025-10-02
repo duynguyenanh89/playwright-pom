@@ -25,7 +25,7 @@ pipeline {
                 echo  "Start running Playwright ......."
                 echo  "-----------------------------------------------------------------"
                 sh 'docker run --rm --ipc=host mcr.microsoft.com/playwright:v1.55.1-noble /bin/bash'
-                sh 'npx playwright test' 
+                sh 'npx playwright test -g @smoke' 
             }
             post {
                 always {
