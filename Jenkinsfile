@@ -1,6 +1,7 @@
 pipeline {
     tools {
         nodejs 'NodeJS_24.1.0'
+        DockerTool 'Docker_20.10.17'
 
     }
 
