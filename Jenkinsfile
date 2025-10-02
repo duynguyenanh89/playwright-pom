@@ -5,8 +5,8 @@ pipeline {
 
     //Add /usr/local/bin to PATH for docker command
     environment {
-        PATH = "/usr/local/bin:$PATH"
-        // PATH = "/Applications/Docker.app/Contents/Resources/bin:$PATH"
+        // PATH = "/usr/local/bin:$PATH"
+        PATH = "/Applications/Docker.app/Contents/Resources/bin:$PATH"
     }
 
     agent any
