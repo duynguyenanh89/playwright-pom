@@ -5,8 +5,8 @@ pipeline {
 
     //Add /usr/local/bin to PATH for docker command
     environment {
-        // PATH = "/usr/local/bin:$PATH"
-        PATH = "/Applications/Docker.app/Contents/Resources/bin:$PATH"
+        PATH = "/usr/local/bin:$PATH"
+        // PATH = "/Applications/Docker.app/Contents/Resources/bin:$PATH"
     }
 
     agent any
@@ -21,12 +21,6 @@ pipeline {
         }
 
         stage('Run Playwright Tests') {
-            agent {
-                docker {
-                    image 'mcr.microsoft.com/playwright:v1.55.1-noble'
-                    args '--ipc=host'
-                }
-            }
             steps {
                 echo  "-----------------------------------------------------------------"
                 echo  "Start running Playwright ......."
