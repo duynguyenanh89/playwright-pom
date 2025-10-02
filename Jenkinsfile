@@ -2,14 +2,14 @@ pipeline {
     tools {
         nodejs 'NodeJS_24.1.0'
     }
-    agent any
+    // agent any
 
-    // agent {
-    //     docker {
-    //         image 'mcr.microsoft.com/playwright:v1.44.0-jammy'
-    //         args '--ipc=host'
-    //     }
-    // }
+    agent {
+        docker {
+            image 'mcr.microsoft.com/playwright:v1.44.0-jammy'
+            args '--ipc=host'
+        }
+    }
 
     stages {
         stage('Install Dependencies') {
