@@ -37,7 +37,7 @@ pipeline {
         stage('Run Playwright Tests') {
             steps {
                 script {
-                        sh 'docker run --rm --ipc=host mcr.microsoft.com/playwright:v1.55.0-noble /bin/bash'
+                        sh 'docker run --rm --ipc=host mcr.microsoft.com/playwright:v1.55.1-noble /bin/bash'
                         sh 'npx playwright test'
                 }
             }
