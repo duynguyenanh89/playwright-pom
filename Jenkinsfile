@@ -1,8 +1,6 @@
 pipeline {
     tools {
         nodejs 'NodeJS_24.1.0'
-        DockerTool 'Docker_20.10.17'
-
     }
 
     //Add /usr/local/bin to PATH for docker command
@@ -39,9 +37,7 @@ pipeline {
         stage('Run Playwright Tests') {
             steps {
                 script {
-                    sh 'docker --version'
-                    sh 'docker info'
-                    docker.image('mcr.microsoft.com/playwright:v1.55.1-noble').inside {
+                        sh 'docker run -it --rm --ipc=host mcr.microsoft.com/playwright:v1.55.0-noble /bin/bash'
                         sh 'npx playwright test'
                     }
                 }
