@@ -5,7 +5,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HOST = 'unix:///var/run/docker.sock'
+        PATH = "/usr/local/bin:$PATH"
     }
 
     // agent {
