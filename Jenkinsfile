@@ -17,7 +17,8 @@ pipeline {
                 sh 'docker --version'
                 sh 'docker info'
             }
-}
+        }
+        
         stage('Install Dependencies') {
             steps {
                 echo "Installing npm dependencies..."
