@@ -14,20 +14,20 @@ pipeline {
     // }
 
     stages {
-        stage('Check Host Docker') {
-            environment {
-                PATH = "/usr/local/bin:$PATH"  // Adjust if docker is elsewhere
-            }
-            steps {
-                script {
-                    // Verify Docker CLI and daemon on host
-                    sh 'echo "Host PATH: $PATH"'
-                    sh 'which docker || echo "Docker not found"'
-                    sh 'docker --version || echo "Docker CLI failed"'
-                    sh 'docker info --format "{{.ServerVersion}}" || echo "Docker daemon not accessible"'
-                }
-            }
-        }
+        // stage('Check Host Docker') {
+        //     environment {
+        //         PATH = "/usr/local/bin:$PATH"  // Adjust if docker is elsewhere
+        //     }
+        //     steps {
+        //         script {
+        //             // Verify Docker CLI and daemon on host
+        //             sh 'echo "Host PATH: $PATH"'
+        //             sh 'which docker || echo "Docker not found"'
+        //             sh 'docker --version || echo "Docker CLI failed"'
+        //             sh 'docker info --format "{{.ServerVersion}}" || echo "Docker daemon not accessible"'
+        //         }
+        //     }
+        // }
 
         // stage('Check npm/Node in Docker') {
         //     agent {
