@@ -36,11 +36,8 @@ pipeline {
     
         stage('Run Playwright Tests') {
             steps {
-                echo { 
-                    "--------------------------------"
-                    "Start running Playwright ......."
-                }
-                //echo "Running Playwright ..."
+                echo  "--------------------------------"
+                echo  "Start running Playwright ......."
                 sh 'npx playwright test' 
             }
             post {
