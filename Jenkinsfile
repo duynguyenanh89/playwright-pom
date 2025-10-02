@@ -1,20 +1,22 @@
 pipeline {
     tools {
         nodejs 'NodeJS_24.1.0'
+
     }
-    agent any
 
     //Add /usr/local/bin to PATH for docker command
     environment {
         PATH = "/usr/local/bin:$PATH"
     }
 
-    // agent {
-    //     docker {
-    //         image 'mcr.microsoft.com/playwright:v1.55.1-noble'
-    //         args '--ipc=host'
-    //     }
-    // }
+    // agent any
+
+    agent {
+        docker {
+            image 'mcr.microsoft.com/playwright:v1.55.1-noble'
+            args '--ipc=host'
+        }
+    }
 
     stages {
         stage('Check Docker') {
