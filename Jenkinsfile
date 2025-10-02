@@ -9,7 +9,7 @@ pipeline {
         PATH = "/usr/local/bin:$PATH"
     }
 
-    agent any
+    agent none
 
     // agent {
     //     docker {
@@ -35,9 +35,16 @@ pipeline {
         }
     
         stage('Run Playwright Tests') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.55.1-noble'
+                    args '--ipc=host'
+                }
+            }
             steps {
-                echo  "--------------------------------"
+                echo  "-----------------------------------------------------------------"
                 echo  "Start running Playwright ......."
+                echo  "-----------------------------------------------------------------"
                 sh 'npx playwright test' 
             }
             post {
