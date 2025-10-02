@@ -9,14 +9,14 @@ pipeline {
         PATH = "/usr/local/bin:$PATH"
     }
 
-    // agent any
+    agent any
 
-    agent {
-        docker {
-            image 'mcr.microsoft.com/playwright:v1.55.1-noble'
-            args '--ipc=host'
-        }
-    }
+    // agent {
+    //     docker {
+    //         image 'mcr.microsoft.com/playwright:v1.55.1-noble'
+    //         args '--ipc=host'
+    //     }
+    // }
 
     stages {
         stage('Check Docker') {
