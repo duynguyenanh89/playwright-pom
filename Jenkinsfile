@@ -5,27 +5,13 @@ pipeline {
 
     //Add /usr/local/bin to PATH for docker command
     environment {
-        // PATH = "/usr/local/bin:$PATH"
-        PATH = "/Applications/Docker.app/Contents/Resources/bin:$PATH"
+        PATH = "/usr/local/bin:$PATH"
+        // PATH = "/Applications/Docker.app/Contents/Resources/bin:$PATH"
     }
 
     agent any
 
-    // agent {
-    //     docker {
-    //         image 'mcr.microsoft.com/playwright:v1.55.1-noble'
-    //         args '--ipc=host'
-    //     }
-    // }
-
     stages {
-        stage('Check Docker') {
-            steps {
-                sh 'docker --version'
-                sh 'docker info'
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
                 echo "Installing npm dependencies..."
@@ -35,41 +21,32 @@ pipeline {
         }
 
         stage('Run Playwright Tests') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.55.1-noble'
+                    args '--ipc=host'
+                }
+            }
             steps {
-                script {
-                        sh 'docker run --rm --ipc=host mcr.microsoft.com/playwright:v1.55.1-noble /bin/bash'
-                        sh 'npx playwright test'
+                echo  "-----------------------------------------------------------------"
+                echo  "Start running Playwright ......."
+                echo  "-----------------------------------------------------------------"
+                sh 'docker run --rm --ipc=host mcr.microsoft.com/playwright:v1.55.1-noble /bin/bash'
+                sh 'npx playwright test' 
+            }
+            post {
+                always {
+                    // Keep source code, remove unnecessary folder/files
+                    // sh 'rm -rf playwright-report test-results allure-results'
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: 'allure-results']],
+                    reportBuildPolicy: 'ALWAYS'  
+                ])
                 }
             }
         }
-        
-    
-        // stage('Run Playwright Tests') {
-        //     agent {
-        //         docker {
-        //             image 'mcr.microsoft.com/playwright:v1.55.1-noble'
-        //             args '--ipc=host'
-        //         }
-        //     }
-        //     steps {
-        //         echo  "-----------------------------------------------------------------"
-        //         echo  "Start running Playwright ......."
-        //         echo  "-----------------------------------------------------------------"
-        //         sh 'npx playwright test' 
-        //     }
-        //     post {
-        //         always {
-        //             // Keep source code, remove unnecessary folder/files
-        //             // sh 'rm -rf playwright-report test-results allure-results'
-        //         allure([
-        //             includeProperties: false,
-        //             jdk: '',
-        //             results: [[path: 'allure-results']],
-        //             reportBuildPolicy: 'ALWAYS'  
-        //         ])
-        //         }
-        //     }
-        // }
     }
     
     post {
