@@ -9,7 +9,7 @@ pipeline {
         PATH = "/usr/local/bin:$PATH"
     }
 
-    agent none
+    agent any
 
     // agent {
     //     docker {
