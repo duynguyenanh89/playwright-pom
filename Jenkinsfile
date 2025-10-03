@@ -4,9 +4,16 @@ pipeline {
         nodejs 'NodeJS_24.1.0'
     }
 
-    //Add /usr/local/bin to PATH for docker command
+
     environment {
-        PATH = "/usr/local/bin:$PATH"
+        //Add /usr/local/bin to PATH for docker command
+        PATH = "/usr/local/bin:$PATH"     
+
+        // Initialize commit details as empty
+        COMMIT_HASH = ''
+        COMMIT_AUTHOR = ''
+        COMMIT_MESSAGE = ''
+        COMMIT_DATE = ''
     }
 
     agent any
@@ -43,16 +50,21 @@ pipeline {
 
                 success {
                     script {
-                        //  "text": "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nView Details: ${env.BUILD_URL}"
+                        // Capture commit details
+                        env.COMMIT_HASH = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                        env.COMMIT_AUTHOR = sh(script: 'git log -1 --pretty=%an', returnStdout: true).trim()
+                        env.COMMIT_MESSAGE = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                        env.COMMIT_DATE = sh(script: 'git log -1 --pretty=%ad', returnStdout: true).trim()
+
                         def message = """
                         {
                             "text": 
                             "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}
-                            \nCommit: ${env.COMMIT_HASH}
-                            \nAuthor: ${env.COMMIT_AUTHOR}
-                            \nMessage: ${env.COMMIT_MESSAGE}
-                            \nDate: ${env.COMMIT_DATE}
-                            \nView Details: ${env.BUILD_URL}"
+                            Commit: ${env.COMMIT_HASH}
+                            Author: ${env.COMMIT_AUTHOR}
+                            Message: ${env.COMMIT_MESSAGE}
+                            Date: ${env.COMMIT_DATE}
+                            View Details: ${env.BUILD_URL}"
                         }
                         """
                         httpRequest contentType: 'APPLICATION_JSON', 
@@ -64,16 +76,15 @@ pipeline {
 
                 failure {
                     script {
-                        // "text": "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nView Details: ${env.BUILD_URL}"
                         def message = """
                         {
                             "text": 
                             "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}
-                            \nCommit: ${env.COMMIT_HASH}
-                            \nAuthor: ${env.COMMIT_AUTHOR}
-                            \nMessage: ${env.COMMIT_MESSAGE}
-                            \nDate: ${env.COMMIT_DATE}
-                            \nView Details: ${env.BUILD_URL}"
+                            Commit: ${env.COMMIT_HASH}
+                            Author: ${env.COMMIT_AUTHOR}
+                            Message: ${env.COMMIT_MESSAGE}
+                            Date: ${env.COMMIT_DATE}
+                            View Details: ${env.BUILD_URL}"
                         }
                         """
                         httpRequest contentType: 'APPLICATION_JSON', 
