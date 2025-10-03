@@ -1,4 +1,5 @@
 pipeline {
+
     tools {
         nodejs 'NodeJS_24.1.0'
     }
@@ -27,17 +28,17 @@ pipeline {
                 sh 'docker run --rm --ipc=host mcr.microsoft.com/playwright:v1.55.1-noble /bin/bash'
                 sh 'npx playwright test -g "@Smoke|@Regression"' 
             }
+
             post {
-                
                 always {
                     // Keep source code, remove unnecessary folder/files
                     // sh 'rm -rf playwright-report test-results allure-results'
-                allure([
-                    includeProperties: false,
-                    jdk: '',
-                    results: [[path: 'allure-results']],
-                    reportBuildPolicy: 'ALWAYS'  
-                ])
+                    allure([
+                        includeProperties: false,
+                        jdk: '',
+                        results: [[path: 'allure-results']],
+                        reportBuildPolicy: 'ALWAYS'  
+                    ])
                 }
 
                 success {
@@ -45,13 +46,13 @@ pipeline {
                         //  "text": "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nView Details: ${env.BUILD_URL}"
                         def message = """
                         {
-               
-                            Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}
-                            Commit: ${commitHash}
-                            Author: ${commitAuthor}
-                            Message: ${commitMessage}
-                            Date: ${commitDate}
-                            View Details: ${env.BUILD_URL}
+                            "text": 
+                            "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+                            \nCommit: ${env.COMMIT_HASH}
+                            \nAuthor: ${env.COMMIT_AUTHOR}
+                            \nMessage: ${env.COMMIT_MESSAGE}
+                            \nDate: ${env.COMMIT_DATE}
+                            \nView Details: ${env.BUILD_URL}"
                         }
                         """
                         httpRequest contentType: 'APPLICATION_JSON', 
@@ -66,13 +67,13 @@ pipeline {
                         // "text": "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nView Details: ${env.BUILD_URL}"
                         def message = """
                         {
-
-                            Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}
-                            Commit: ${commitHash}
-                            Author: ${commitAuthor}
-                            Message: ${commitMessage}
-                            Date: ${commitDate}
-                            View Details: ${env.BUILD_URL}
+                            "text": 
+                            "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+                            \nCommit: ${env.COMMIT_HASH}
+                            \nAuthor: ${env.COMMIT_AUTHOR}
+                            \nMessage: ${env.COMMIT_MESSAGE}
+                            \nDate: ${env.COMMIT_DATE}
+                            \nView Details: ${env.BUILD_URL}"
                         }
                         """
                         httpRequest contentType: 'APPLICATION_JSON', 
