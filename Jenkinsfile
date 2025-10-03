@@ -42,9 +42,16 @@ pipeline {
 
                 success {
                     script {
+                        //  "text": "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nView Details: ${env.BUILD_URL}"
                         def message = """
                         {
-                            "text": "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nView Details: ${env.BUILD_URL}"
+               
+                            Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+                            Commit: ${commitHash}
+                            Author: ${commitAuthor}
+                            Message: ${commitMessage}
+                            Date: ${commitDate}
+                            View Details: ${env.BUILD_URL}
                         }
                         """
                         httpRequest contentType: 'APPLICATION_JSON', 
@@ -56,9 +63,16 @@ pipeline {
 
                 failure {
                     script {
+                        // "text": "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nView Details: ${env.BUILD_URL}"
                         def message = """
                         {
-                            "text": "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nView Details: ${env.BUILD_URL}"
+
+                            Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+                            Commit: ${commitHash}
+                            Author: ${commitAuthor}
+                            Message: ${commitMessage}
+                            Date: ${commitDate}
+                            View Details: ${env.BUILD_URL}
                         }
                         """
                         httpRequest contentType: 'APPLICATION_JSON', 
