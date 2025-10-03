@@ -84,7 +84,8 @@ playwright-project/
     `for i in {1..5}; do ENV=stg npx playwright test tests/webapp/auth/webapp-signin.spec.ts; done`
   Parallel Run
     `ENV=stg npx playwright test tests/webapp/auth/webapp-signin.spec.ts --repeat-each 3`
-- Run specific test case:  `npx playwright test -g "add a todo item" `
+- Run specific test case:  `npx playwright test -g "@Smoke" `
+                           `npx playwright test -g "@Smoke|@Regression"`
 - Run last failed tests:  `npx playwright test --last-failed`
 - Run headed mode: `npx playwright test --headed` 
 - Run debug mode:  `npx playwright test --debug`
