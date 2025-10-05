@@ -1,53 +1,24 @@
 pipeline {
+
     tools {
         nodejs 'NodeJS_24.1.0' 
     }
+
+
+    environment {
+        //Add /usr/local/bin to PATH for docker command
+        PATH = "/usr/local/bin:$PATH"     
+
+        // Initialize commit details as empty
+        COMMIT_HASH = ''
+        COMMIT_AUTHOR = ''
+        COMMIT_MESSAGE = ''
+        COMMIT_DATE = ''
+    }
+
     agent any
 
-    // agent {
-    //     docker {
-    //         // image 'mcr.microsoft.com/playwright:v1.55.0-noble'  // Use a specific version for reproducibility
-    //         // args '--shm-size=1g'  // Increase shared memory for browser stability
-    //         image 'node:24'  // Official Node.js image with npm pre-installed
-    //         args '-u root'   // Run as root to avoid permission issues
-    //     }
-    // }
-
     stages {
-        // stage('Check Host Docker') {
-        //     environment {
-        //         PATH = "/usr/local/bin:$PATH"  // Adjust if docker is elsewhere
-        //     }
-        //     steps {
-        //         script {
-        //             // Verify Docker CLI and daemon on host
-        //             sh 'echo "Host PATH: $PATH"'
-        //             sh 'which docker || echo "Docker not found"'
-        //             sh 'docker --version || echo "Docker CLI failed"'
-        //             sh 'docker info --format "{{.ServerVersion}}" || echo "Docker daemon not accessible"'
-        //         }
-        //     }
-        // }
-
-        // stage('Check npm/Node in Docker') {
-        //     agent {
-        //         docker {
-        //             image 'node:18'  // Node.js 18 with npm
-        //             args '-u root'   // Avoid permission issues
-        //         }
-        //     }
-        //     steps {
-        //         script {
-        //             // Verify npm/Node in container
-        //             sh 'echo "Container user: $(whoami)"'
-        //             sh 'echo "Container PATH: $PATH"'
-        //             sh 'node --version'
-        //             sh 'npm --version'
-        //             sh 'which npm || echo "npm not in PATH"'
-        //         }
-        //     }
-        // }
-
         stage('Install Dependencies') {
             steps {
                 echo "Installing npm dependencies..."
@@ -55,22 +26,75 @@ pipeline {
                 sh 'npx playwright install --with-deps'  // Install Playwright browsers and system deps
             }
         }
-    
+
         stage('Run Playwright Tests') {
             steps {
-                echo "Running Playwright tests..."
-                sh 'npx playwright test' 
+                echo  "-----------------------------------------------------------------"
+                echo  "Start running Playwright ......."
+                echo  "-----------------------------------------------------------------"
+                sh 'docker run --rm --ipc=host mcr.microsoft.com/playwright:v1.55.1-noble /bin/bash'
+                sh 'npx playwright test -g "@Smoke|@Regression"' 
             }
+
             post {
                 always {
                     // Keep source code, remove unnecessary folder/files
-                    sh 'rm -rf playwright-report test-results allure-results'
-                allure([
-                    includeProperties: false,
-                    jdk: '',
-                    results: [[path: 'allure-results']],
-                    reportBuildPolicy: 'ALWAYS'  
-                ])
+                    // sh 'rm -rf playwright-report test-results allure-results'
+                    allure([
+                        includeProperties: false,
+                        jdk: '',
+                        results: [[path: 'allure-results']],
+                        reportBuildPolicy: 'ALWAYS'  
+                    ])
+                }
+
+                success {
+                    script {
+                        // Capture commit details
+                        env.COMMIT_HASH = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                        env.COMMIT_AUTHOR = sh(script: 'git log -1 --pretty=%an', returnStdout: true).trim()
+                        env.COMMIT_MESSAGE = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                        env.COMMIT_DATE = sh(script: 'git log -1 --pretty=%ad', returnStdout: true).trim()
+
+                        // Debug output
+                        echo "Commit Details: Hash=${env.COMMIT_HASH}, Author=${env.COMMIT_AUTHOR}, Message=${env.COMMIT_MESSAGE}, Date=${env.COMMIT_DATE}"
+
+                        def message = """
+                        {
+                            "text": 
+                            "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+                            Commit: ${env.COMMIT_HASH}
+                            Author: ${env.COMMIT_AUTHOR}
+                            Message: ${env.COMMIT_MESSAGE}
+                            Date: ${env.COMMIT_DATE}
+                            View Details: ${env.BUILD_URL}"
+                        }
+                        """
+                        httpRequest contentType: 'APPLICATION_JSON', 
+                                    httpMode: 'POST', 
+                                    requestBody: message, 
+                                    url: 'https://chat.googleapis.com/v1/spaces/AAQA-Iaj1-s/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=GL57ujfXoSYdvCa3qd9m39L-6rjWwxcxZUlRNIqQ7Ck'
+                    }
+                }
+
+                failure {
+                    script {
+                        def message = """
+                        {
+                            "text": 
+                            "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+                            Commit: ${env.COMMIT_HASH}
+                            Author: ${env.COMMIT_AUTHOR}
+                            Message: ${env.COMMIT_MESSAGE}
+                            Date: ${env.COMMIT_DATE}
+                            View Details: ${env.BUILD_URL}"
+                        }
+                        """
+                        httpRequest contentType: 'APPLICATION_JSON', 
+                                    httpMode: 'POST', 
+                                    requestBody: message, 
+                                    url: 'https://chat.googleapis.com/v1/spaces/AAQA-Iaj1-s/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=GL57ujfXoSYdvCa3qd9m39L-6rjWwxcxZUlRNIqQ7Ck'
+                    }
                 }
             }
         }
