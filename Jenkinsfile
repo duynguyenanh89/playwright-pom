@@ -63,14 +63,15 @@ pipeline {
                         {
                             "text": 
                             "Build SUCCESSFUL:
-                            ${env.JOB_NAME} #${env.BUILD_NUMBER}
-                            Commit: ${env.COMMIT_HASH}
-                            Author: ${env.COMMIT_AUTHOR}
-                            Message: ${env.COMMIT_MESSAGE}
-                            Date: ${env.COMMIT_DATE}
-                            View Details: ${env.BUILD_URL}"
+                            ${env.JOB_NAME} #${env.BUILD_NUMBER}"
                         }
                         """
+                            //   Commit: ${env.COMMIT_HASH}
+                            // Author: ${env.COMMIT_AUTHOR}
+                            // Message: ${env.COMMIT_MESSAGE}
+                            // Date: ${env.COMMIT_DATE}
+                            // View Details: ${env.BUILD_URL}"
+                        }
                         httpRequest contentType: 'APPLICATION_JSON', 
                                     httpMode: 'POST', 
                                     requestBody: message, 
@@ -84,14 +85,15 @@ pipeline {
                         {
                             "text": 
                             "Build FAILED: 
-                            ${env.JOB_NAME} #${env.BUILD_NUMBER}
-                            Commit: ${env.COMMIT_HASH}
-                            Author: ${env.COMMIT_AUTHOR}
-                            Message: ${env.COMMIT_MESSAGE}
-                            Date: ${env.COMMIT_DATE}
-                            View Details: ${env.BUILD_URL}"
+                            ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+
                         }
                         """
+                            //                         Commit: ${env.COMMIT_HASH}
+                            // Author: ${env.COMMIT_AUTHOR}
+                            // Message: ${env.COMMIT_MESSAGE}
+                            // Date: ${env.COMMIT_DATE}
+                            // View Details: ${env.BUILD_URL}"
                         httpRequest contentType: 'APPLICATION_JSON', 
                                     httpMode: 'POST', 
                                     requestBody: message, 
