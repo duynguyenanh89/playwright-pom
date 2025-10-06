@@ -9,11 +9,11 @@ pipeline {
         //Add /usr/local/bin to PATH for docker command
         PATH = "/usr/local/bin:$PATH"     
 
-        // Initialize commit details as empty
-        COMMIT_HASH = ''
-        COMMIT_AUTHOR = ''
-        COMMIT_MESSAGE = ''
-        COMMIT_DATE = ''
+        // // Initialize commit details as empty
+        // COMMIT_HASH = ''
+        // COMMIT_AUTHOR = ''
+        // COMMIT_MESSAGE = ''
+        // COMMIT_DATE = ''
     }
 
     agent any
@@ -51,10 +51,10 @@ pipeline {
                 success {
                     script {
                         // Capture commit details
-                        env.COMMIT_HASH = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                        env.COMMIT_AUTHOR = sh(script: 'git log -1 --pretty=%an', returnStdout: true).trim()
-                        env.COMMIT_MESSAGE = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                        env.COMMIT_DATE = sh(script: 'git log -1 --pretty=%ad', returnStdout: true).trim()
+                        // env.COMMIT_HASH = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                        // env.COMMIT_AUTHOR = sh(script: 'git log -1 --pretty=%an', returnStdout: true).trim()
+                        // env.COMMIT_MESSAGE = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                        // env.COMMIT_DATE = sh(script: 'git log -1 --pretty=%ad', returnStdout: true).trim()
 
                         // Debug output
                         echo "Commit Details: Hash=${env.COMMIT_HASH}, Author=${env.COMMIT_AUTHOR}, Message=${env.COMMIT_MESSAGE}, Date=${env.COMMIT_DATE}"
@@ -62,7 +62,8 @@ pipeline {
                         def message = """
                         {
                             "text": 
-                            "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+                            "Build SUCCESSFUL:
+                            ${env.JOB_NAME} #${env.BUILD_NUMBER}
                             Commit: ${env.COMMIT_HASH}
                             Author: ${env.COMMIT_AUTHOR}
                             Message: ${env.COMMIT_MESSAGE}
@@ -82,7 +83,8 @@ pipeline {
                         def message = """
                         {
                             "text": 
-                            "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+                            "Build FAILED: 
+                            ${env.JOB_NAME} #${env.BUILD_NUMBER}
                             Commit: ${env.COMMIT_HASH}
                             Author: ${env.COMMIT_AUTHOR}
                             Message: ${env.COMMIT_MESSAGE}
