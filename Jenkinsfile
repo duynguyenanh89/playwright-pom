@@ -1,9 +1,7 @@
 pipeline {
-
     tools {
         nodejs 'NodeJS_24.1.0'
     }
-
 
     environment {
         //Add /usr/local/bin to PATH for docker command
@@ -60,12 +58,12 @@ pipeline {
                         // echo "Commit Details: Hash=${env.COMMIT_HASH}, Author=${env.COMMIT_AUTHOR}, Message=${env.COMMIT_MESSAGE}, Date=${env.COMMIT_DATE}"
 
                         def message = """
-                        {
+                            {
                             "text": 
                             "Build SUCCESSFUL:
                             ${env.JOB_NAME} #${env.BUILD_NUMBER}"
-                        }
-                        """
+                            }
+                            """
                             //   Commit: ${env.COMMIT_HASH}
                             // Author: ${env.COMMIT_AUTHOR}
                             // Message: ${env.COMMIT_MESSAGE}
@@ -73,11 +71,11 @@ pipeline {
                             // View Details: ${env.BUILD_URL}"
                         }
                         httpRequest contentType: 'APPLICATION_JSON', 
-                                    httpMode: 'POST', 
-                                    requestBody: message, 
-                                    url: 'https://chat.googleapis.com/v1/spaces/AAQA-Iaj1-s/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=GL57ujfXoSYdvCa3qd9m39L-6rjWwxcxZUlRNIqQ7Ck'
-                    }
+                        httpMode: 'POST', 
+                        requestBody: message, 
+                        url: 'https://chat.googleapis.com/v1/spaces/AAQA-Iaj1-s/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=GL57ujfXoSYdvCa3qd9m39L-6rjWwxcxZUlRNIqQ7Ck'
                 }
+            }
 
                 failure {
                     script {
@@ -89,35 +87,34 @@ pipeline {
 
                         }
                         """
-                            //                         Commit: ${env.COMMIT_HASH}
+                            // Commit: ${env.COMMIT_HASH}
                             // Author: ${env.COMMIT_AUTHOR}
                             // Message: ${env.COMMIT_MESSAGE}
                             // Date: ${env.COMMIT_DATE}
                             // View Details: ${env.BUILD_URL}"
                         httpRequest contentType: 'APPLICATION_JSON', 
-                                    httpMode: 'POST', 
-                                    requestBody: message, 
-                                    url: 'https://chat.googleapis.com/v1/spaces/AAQA-Iaj1-s/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=GL57ujfXoSYdvCa3qd9m39L-6rjWwxcxZUlRNIqQ7Ck'
+                        httpMode: 'POST', 
+                        requestBody: message, 
+                        url: 'https://chat.googleapis.com/v1/spaces/AAQA-Iaj1-s/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=GL57ujfXoSYdvCa3qd9m39L-6rjWwxcxZUlRNIqQ7Ck'
+                    }
+                }
+        }
+        
+        post {
+            always {
+                script {
+                    // Ensure cleanWs runs in the Docker agent context
+                    node('') {  // Reuse the pipeline's Docker agent
+                        cleanWs()
                     }
                 }
             }
-        }
-    }
-    
-    post {
-        always {
-            script {
-                // Ensure cleanWs runs in the Docker agent context
-                node('') {  // Reuse the pipeline's Docker agent
-                    cleanWs()
-                }
+            success {
+                echo "All tests passed! 🎉"
             }
-        }
-        success {
-            echo "All tests passed! 🎉"
-        }
-        failure {
-            echo "Tests failed. Check artifacts for details. ❌"
+            failure {
+                echo "Tests failed. Check artifacts for details. ❌"
+            }
         }
     }
 }
