@@ -56,8 +56,8 @@ pipeline {
                         // env.COMMIT_MESSAGE = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
                         // env.COMMIT_DATE = sh(script: 'git log -1 --pretty=%ad', returnStdout: true).trim()
 
-                        // Debug output
-                        echo "Commit Details: Hash=${env.COMMIT_HASH}, Author=${env.COMMIT_AUTHOR}, Message=${env.COMMIT_MESSAGE}, Date=${env.COMMIT_DATE}"
+                        // // Debug output
+                        // echo "Commit Details: Hash=${env.COMMIT_HASH}, Author=${env.COMMIT_AUTHOR}, Message=${env.COMMIT_MESSAGE}, Date=${env.COMMIT_DATE}"
 
                         def message = """
                         {
