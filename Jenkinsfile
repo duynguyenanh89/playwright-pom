@@ -6,12 +6,6 @@ pipeline {
     environment {
         //Add /usr/local/bin to PATH for docker command
         PATH = "/usr/local/bin:$PATH"     
-
-        // // Initialize commit details as empty
-        // COMMIT_HASH = ''
-        // COMMIT_AUTHOR = ''
-        // COMMIT_MESSAGE = ''
-        // COMMIT_DATE = ''
     }
 
     agent any
@@ -27,10 +21,10 @@ pipeline {
 
         stage('Run Playwright Tests') {
             steps {
-                echo  "-----------------------------------------------------------------"
-                echo  "Start running Playwright ......."
-                echo  "-----------------------------------------------------------------"
-                sh 'docker run --rm --ipc=host mcr.microsoft.com/playwright:v1.55.1-noble /bin/bash'
+                echo "-----------------------------------------------------------------"
+                echo "Starting Playwright tests..."
+                echo "-----------------------------------------------------------------"
+                sh 'docker run --rm --ipc=host mcr.microsoft.com/playwright:v1.55.1-noble /bin/bash -c "npx playwright test -g \"@Smoke|@Regression\" " '
                 sh 'npx playwright test -g "@Smoke|@Regression"' 
             }
         }
@@ -45,29 +39,6 @@ pipeline {
                     results: [[path: 'allure-results']],
                     reportBuildPolicy: 'ALWAYS'  
                 ])
-            }
-            success {
-                script {
-                    def message = """{"text": "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}"""
-                    httpRequest contentType: 'APPLICATION_JSON', 
-                    httpMode: 'POST', 
-                    requestBody: message, 
-                    url: 'https://chat.googleapis.com/v1/spaces/AAQA-Iaj1-s/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=GL57ujfXoSYdvCa3qd9m39L-6rjWwxcxZUlRNIqQ7Ck'
-                }
-            }
-            failure {
-                script {
-                    def message = """{"text": "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}"""
-                    httpRequest contentType: 'APPLICATION_JSON', 
-                    httpMode: 'POST', 
-                    requestBody: message, 
-                    url: 'https://chat.googleapis.com/v1/spaces/AAQA-Iaj1-s/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=GL57ujfXoSYdvCa3qd9m39L-6rjWwxcxZUlRNIqQ7Ck'
-                }
-            }
-        }   
-        
-        post {
-            always {
                 script {
                     // Ensure cleanWs runs in the Docker agent context
                     node('') {  // Reuse the pipeline's Docker agent
@@ -76,11 +47,31 @@ pipeline {
                 }
             }
             success {
-                echo "All tests passed! 🎉"
+                withCredentials([string(credentialsId: 'google-chat-webhook', variable: 'WEBHOOK_URL')]) {
+                    script {
+                        def message = """{"text": "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}"""
+                        httpRequest contentType: 'APPLICATION_JSON',
+                                    httpMode: 'POST',
+                                    requestBody: message,
+                                    url: "${WEBHOOK_URL}",
+                                    quiet: true
+                    }
+                }
+                echo 'All tests passed! 🎉'
             }
             failure {
-                echo "Tests failed. Check artifacts for details. ❌"
+                withCredentials([string(credentialsId: 'google-chat-webhook', variable: 'WEBHOOK_URL')]) {
+                    script {
+                        def message = """{"text": "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}"""
+                        httpRequest contentType: 'APPLICATION_JSON',
+                                    httpMode: 'POST',
+                                    requestBody: message,
+                                    url: "${WEBHOOK_URL}",
+                                    quiet: true
+                    }
+                }
+                echo 'Tests failed. Check artifacts for details. ❌'
             }
-        }
+        }   
     }
 }
