@@ -19,23 +19,43 @@ pipeline {
     stages {
         stage('Clean Workspace') {
             steps {
-                sh 'rm -rf playwright-report test-results allure-results' // clean workspace
+                if (isUnix()) {
+                    sh 'rm -rf playwright-report test-results allure-results' // clean workspace    
+                }
+                else {
+                    bash -c "rm -rf playwright-report test-results allure-results"
+                }
             }
         }
         stage('Install Dependencies') {
             steps {
-                echo "Installing npm dependencies..."
-                sh 'npm ci'
-                sh 'npx playwright install --with-deps'
+                if (isUnix()) {
+                    echo "Installing npm dependencies..."
+                    sh 'npm ci'
+                    sh 'npx playwright install --with-deps'
+                }
+                else {
+                    echo "Installing npm dependencies..."
+                    bash -c 'npm ci'
+                    bash -c 'npx playwright install --with-deps'
+                }
             }
         }
 
         stage('Run Playwright Tests') {
             steps {
-                echo "-----------------------------------------------------------------"
-                echo "Starting Playwright tests..."
-                echo "-----------------------------------------------------------------"
-                sh 'npx playwright test -g "@Login|@Read-json"'
+                if (isUnix()) {
+                    echo "-----------------------------------------------------------------"
+                    echo "Starting Playwright tests..."
+                    echo "-----------------------------------------------------------------"
+                    sh 'npx playwright test -g "@Login|@Read-json"'
+                }
+                else {
+                    echo "-----------------------------------------------------------------"
+                    echo "Starting Playwright tests..."
+                    echo "-----------------------------------------------------------------"
+                    bash -c 'npx playwright test -g "@Login|@Read-json"'
+                }
             }
         }
     }
