@@ -54,7 +54,7 @@ pipeline {
                     httpRequest contentType: 'APPLICATION_JSON',
                                 httpMode: 'POST',
                                 requestBody: message,
-                                url: "${WEBHOOK_URL}",
+                                url: WEBHOOK_URL,
                                 quiet: true
                 }
             }
@@ -67,7 +67,7 @@ pipeline {
                     httpRequest contentType: 'APPLICATION_JSON',
                                 httpMode: 'POST',
                                 requestBody: message,
-                                url: "${WEBHOOK_URL}",
+                                url: WEBHOOK_URL,
                                 quiet: true
                 }
             }
