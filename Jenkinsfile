@@ -24,8 +24,8 @@ pipeline {
                 echo "-----------------------------------------------------------------"
                 echo "Starting Playwright tests..."
                 echo "-----------------------------------------------------------------"
-                sh 'docker run --rm --ipc=host mcr.microsoft.com/playwright:v1.55.1-noble /bin/bash -c "npx playwright test -g \"@Smoke|@Regression\" " '
-                sh 'npx playwright test -g "@Smoke|@Regression"' 
+                sh 'docker run --rm -v $(pwd):/tests -w /tests my-playwright-tests npx playwright test -g "@Login|@Read-json"'
+                // sh 'npx playwright test -g "@Login|@Read-json"' 
             }
         }
     }
