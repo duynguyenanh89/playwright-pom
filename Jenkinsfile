@@ -23,7 +23,7 @@ pipeline {
                     sh 'rm -rf playwright-report test-results allure-results' // clean workspace    
                 }
                 else {
-                    bash -c "rm -rf playwright-report test-results allure-results"
+                    bat 'del /s /q playwright-report test-results allure-results'
                 }
             }
         }
@@ -36,8 +36,8 @@ pipeline {
                 }
                 else {
                     echo "Installing npm dependencies..."
-                    bash -c 'npm ci'
-                    bash -c 'npx playwright install --with-deps'
+                    bat 'bash -c "npm ci"'
+                    bat 'bash -c "npx playwright install --with-deps"'
                 }
             }
         }
@@ -54,7 +54,7 @@ pipeline {
                     echo "-----------------------------------------------------------------"
                     echo "Starting Playwright tests..."
                     echo "-----------------------------------------------------------------"
-                    bash -c 'npx playwright test -g "@Login|@Read-json"'
+                    bat 'bash -c "npx playwright test -g "@Login|@Read-json""'
                 }
             }
         }
