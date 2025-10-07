@@ -1,8 +1,6 @@
 pipeline {
     options {
-    buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '5'))
-    //disableConcurrentBuilds()
-    //timeout(time: 1, unit: 'HOURS')
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '5'))
     }
 
     tools {
@@ -16,6 +14,12 @@ pipeline {
     agent any
 
     stages {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs() // Clean workspace before starting
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
                 echo "Installing npm dependencies..."
@@ -43,12 +47,8 @@ pipeline {
                 reportBuildPolicy: 'ALWAYS'
             ])
             archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
-            sh 'rm -rf playwright-report test-results allure-results' // Uncommented to clean workspace
-            script {
-                node('') {
-                    cleanWs()
-                }
-            }
+            sh 'rm -rf playwright-report test-results allure-results' // Specific cleanup
+            cleanWs() // General workspace cleanup
         }
         success {
             withCredentials([string(credentialsId: 'google-chat-webhook', variable: 'WEBHOOK_URL')]) {
