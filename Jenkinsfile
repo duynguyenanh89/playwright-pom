@@ -11,6 +11,7 @@ pipeline {
 
     environment {
         PATH = "/usr/local/bin:$PATH"
+        DEBUG = '' // Disable verbose Playwright logging
     }
 
     agent any
