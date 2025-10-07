@@ -1,7 +1,9 @@
 pipeline {
-    properties([
-        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '5'))
-    ])
+    options {
+    buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '5'))
+    //disableConcurrentBuilds()
+    //timeout(time: 1, unit: 'HOURS')
+    }
 
     tools {
         nodejs 'NodeJS_24.1.0'
