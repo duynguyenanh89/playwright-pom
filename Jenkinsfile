@@ -1,119 +1,80 @@
 pipeline {
+    options {
+    buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '5'))
+    //disableConcurrentBuilds()
+    //timeout(time: 1, unit: 'HOURS')
+    }
 
     tools {
         nodejs 'NodeJS_24.1.0' 
     }
 
-
     environment {
-        //Add /usr/local/bin to PATH for docker command
-        PATH = "/usr/local/bin:$PATH"     
-
-        // Initialize commit details as empty
-        COMMIT_HASH = ''
-        COMMIT_AUTHOR = ''
-        COMMIT_MESSAGE = ''
-        COMMIT_DATE = ''
+        PATH = "/usr/local/bin:$PATH"
+        DEBUG = '' // Disable verbose Playwright logging
     }
 
     agent any
 
     stages {
+        stage('Clean Workspace') {
+            steps {
+                sh 'rm -rf playwright-report test-results allure-results' // clean workspace
+            }
+        }
         stage('Install Dependencies') {
             steps {
                 echo "Installing npm dependencies..."
-                sh 'npm ci'  // Use 'npm ci' for clean installs in CI
-                sh 'npx playwright install --with-deps'  // Install Playwright browsers and system deps
+                sh 'npm ci'
+                sh 'npx playwright install --with-deps'
             }
         }
 
         stage('Run Playwright Tests') {
             steps {
-                echo  "-----------------------------------------------------------------"
-                echo  "Start running Playwright ......."
-                echo  "-----------------------------------------------------------------"
-                sh 'docker run --rm --ipc=host mcr.microsoft.com/playwright:v1.55.1-noble /bin/bash'
-                sh 'npx playwright test -g "@Smoke|@Regression"' 
-            }
-
-            post {
-                always {
-                    // Keep source code, remove unnecessary folder/files
-                    // sh 'rm -rf playwright-report test-results allure-results'
-                    allure([
-                        includeProperties: false,
-                        jdk: '',
-                        results: [[path: 'allure-results']],
-                        reportBuildPolicy: 'ALWAYS'  
-                    ])
-                }
-
-                success {
-                    script {
-                        // Capture commit details
-                        env.COMMIT_HASH = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                        env.COMMIT_AUTHOR = sh(script: 'git log -1 --pretty=%an', returnStdout: true).trim()
-                        env.COMMIT_MESSAGE = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                        env.COMMIT_DATE = sh(script: 'git log -1 --pretty=%ad', returnStdout: true).trim()
-
-                        // Debug output
-                        echo "Commit Details: Hash=${env.COMMIT_HASH}, Author=${env.COMMIT_AUTHOR}, Message=${env.COMMIT_MESSAGE}, Date=${env.COMMIT_DATE}"
-
-                        def message = """
-                        {
-                            "text": 
-                            "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}
-                            Commit: ${env.COMMIT_HASH}
-                            Author: ${env.COMMIT_AUTHOR}
-                            Message: ${env.COMMIT_MESSAGE}
-                            Date: ${env.COMMIT_DATE}
-                            View Details: ${env.BUILD_URL}"
-                        }
-                        """
-                        httpRequest contentType: 'APPLICATION_JSON', 
-                                    httpMode: 'POST', 
-                                    requestBody: message, 
-                                    url: 'https://chat.googleapis.com/v1/spaces/AAQA-Iaj1-s/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=GL57ujfXoSYdvCa3qd9m39L-6rjWwxcxZUlRNIqQ7Ck'
-                    }
-                }
-
-                failure {
-                    script {
-                        def message = """
-                        {
-                            "text": 
-                            "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}
-                            Commit: ${env.COMMIT_HASH}
-                            Author: ${env.COMMIT_AUTHOR}
-                            Message: ${env.COMMIT_MESSAGE}
-                            Date: ${env.COMMIT_DATE}
-                            View Details: ${env.BUILD_URL}"
-                        }
-                        """
-                        httpRequest contentType: 'APPLICATION_JSON', 
-                                    httpMode: 'POST', 
-                                    requestBody: message, 
-                                    url: 'https://chat.googleapis.com/v1/spaces/AAQA-Iaj1-s/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=GL57ujfXoSYdvCa3qd9m39L-6rjWwxcxZUlRNIqQ7Ck'
-                    }
-                }
+                echo "-----------------------------------------------------------------"
+                echo "Starting Playwright tests..."
+                echo "-----------------------------------------------------------------"
+                sh 'npx playwright test -g "@Login|@Read-json"'
             }
         }
     }
-    
+
     post {
         always {
-            script {
-                // Ensure cleanWs runs in the Docker agent context
-                node('') {  // Reuse the pipeline's Docker agent
-                    cleanWs()
-                }
-            }
+            allure([
+                includeProperties: false,
+                jdk: '',
+                results: [[path: 'allure-results']],
+                reportBuildPolicy: 'ALWAYS'
+            ])
+            archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
         }
         success {
-            echo "All tests passed! 🎉"
+            withCredentials([string(credentialsId: 'google-chat-webhook', variable: 'WEBHOOK_URL')]) {
+                script {
+                    def message = """{"text": "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}"""
+                    httpRequest contentType: 'APPLICATION_JSON',
+                                httpMode: 'POST',
+                                requestBody: message,
+                                url: WEBHOOK_URL,
+                                quiet: true
+                }
+            }
+            echo 'All tests passed! 🎉'
         }
         failure {
-            echo "Tests failed. Check artifacts for details. ❌"
+            withCredentials([string(credentialsId: 'google-chat-webhook', variable: 'WEBHOOK_URL')]) {
+                script {
+                    def message = """{"text": "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}"""
+                    httpRequest contentType: 'APPLICATION_JSON',
+                                httpMode: 'POST',
+                                requestBody: message,
+                                url: WEBHOOK_URL,
+                                quiet: true
+                }
+            }
+            echo 'Tests failed. Check artifacts for details. ❌'
         }
     }
 }
