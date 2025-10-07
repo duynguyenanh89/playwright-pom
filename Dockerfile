@@ -8,3 +8,4 @@ COPY . .
 
 #--- Command to build docker image 
 ## docker build -t my-playwright-tests .
+## sh 'docker run --rm -v $(pwd):/tests -w /tests my-playwright-tests npx playwright test -g "@Login|@Read-json"'

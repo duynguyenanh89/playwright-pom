@@ -1,11 +1,14 @@
 pipeline {
+    properties([
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '5'))
+    ])
+
     tools {
         nodejs 'NodeJS_24.1.0'
     }
 
     environment {
-        //Add /usr/local/bin to PATH for docker command
-        PATH = "/usr/local/bin:$PATH"     
+        PATH = "/usr/local/bin:$PATH"
     }
 
     agent any
@@ -14,8 +17,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo "Installing npm dependencies..."
-                sh 'npm ci'  // Use 'npm ci' for clean installs in CI
-                sh 'npx playwright install --with-deps'  // Install Playwright browsers and system deps
+                sh 'npm ci'
+                sh 'npx playwright install --with-deps'
             }
         }
 
@@ -24,25 +27,23 @@ pipeline {
                 echo "-----------------------------------------------------------------"
                 echo "Starting Playwright tests..."
                 echo "-----------------------------------------------------------------"
-                // sh 'docker run --rm -v $(pwd):/tests -w /tests my-playwright-tests npx playwright test -g "@Login|@Read-json"'
-                sh 'npx playwright test -g "@Login|@Read-json"' 
+                sh 'npx playwright test -g "@Login|@Read-json"'
             }
         }
     }
 
     post {
         always {
-            // Keep source code, remove unnecessary folder/files
-            // sh 'rm -rf playwright-report test-results allure-results'
             allure([
                 includeProperties: false,
                 jdk: '',
                 results: [[path: 'allure-results']],
-                reportBuildPolicy: 'ALWAYS'  
+                reportBuildPolicy: 'ALWAYS'
             ])
+            archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
+            sh 'rm -rf playwright-report test-results allure-results' // Uncommented to clean workspace
             script {
-                // Ensure cleanWs runs in the Docker agent context
-                node('') {  // Reuse the pipeline's Docker agent
+                node('') {
                     cleanWs()
                 }
             }
@@ -73,5 +74,5 @@ pipeline {
             }
             echo 'Tests failed. Check artifacts for details. ❌'
         }
-    }   
+    }
 }
