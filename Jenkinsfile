@@ -24,8 +24,8 @@ pipeline {
                 echo "-----------------------------------------------------------------"
                 echo "Starting Playwright tests..."
                 echo "-----------------------------------------------------------------"
-                sh 'docker run --rm -v $(pwd):/tests -w /tests my-playwright-tests npx playwright test -g "@Login|@Read-json"'
-                // sh 'npx playwright test -g "@Login|@Read-json"' 
+                // sh 'docker run --rm -v $(pwd):/tests -w /tests my-playwright-tests npx playwright test -g "@Login|@Read-json"'
+                sh 'npx playwright test -g "@Login|@Read-json"' 
             }
         }
     }
