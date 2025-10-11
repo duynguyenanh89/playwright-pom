@@ -1,8 +1,92 @@
+// pipeline {
+//     options {
+//     buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '5'))
+//     //disableConcurrentBuilds()
+//     //timeout(time: 1, unit: 'HOURS')
+//     }
+
+//     tools {
+//         nodejs 'NodeJS_24.1.0'
+//     }
+
+//     environment {
+//         PATH = "/usr/local/bin:$PATH"
+//         DEBUG = '' // Disable verbose Playwright logging
+//     }
+
+//     agent any
+
+//     stages {
+//         stage('Clean Workspace') {
+//             steps {
+//                 sh 'rm -rf playwright-report test-results allure-results' // clean workspace
+//             }
+//         }
+//         stage('Install Dependencies') {
+//             steps {
+//                 echo "Installing npm dependencies..."
+//                 sh 'npm ci'
+//                 sh 'npx playwright install --with-deps'
+//             }
+//         }
+
+//         stage('Run Playwright Tests') {
+//             steps {
+//                 echo "-----------------------------------------------------------------"
+//                 echo "Starting Playwright tests..."
+//                 echo "-----------------------------------------------------------------"
+//                 sh 'npx playwright test -g "@Login|@Read-json"'
+//             }
+//         }
+//     }
+
+//     post {
+//         always {
+//             allure([
+//                 includeProperties: false,
+//                 jdk: '',
+//                 results: [[path: 'allure-results']],
+//                 reportBuildPolicy: 'ALWAYS'
+//             ])
+//             archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
+//         }
+//         success {
+//             withCredentials([string(credentialsId: 'google-chat-webhook', variable: 'WEBHOOK_URL')]) {
+//                 script {
+//                     def message = """{"text": "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}"""
+//                     httpRequest contentType: 'APPLICATION_JSON',
+//                                 httpMode: 'POST',
+//                                 requestBody: message,
+//                                 url: WEBHOOK_URL,
+//                                 quiet: true
+//                 }
+//             }
+//             echo 'All tests passed! 🎉'
+//         }
+//         failure {
+//             withCredentials([string(credentialsId: 'google-chat-webhook', variable: 'WEBHOOK_URL')]) {
+//                 script {
+//                     def message = """{"text": "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}"""
+//                     httpRequest contentType: 'APPLICATION_JSON',
+//                                 httpMode: 'POST',
+//                                 requestBody: message,
+//                                 url: WEBHOOK_URL,
+//                                 quiet: true
+//                 }
+//             }
+//             echo 'Tests failed. Check artifacts for details. ❌'
+//         }
+//     }
+// }
+
+
+
+
 pipeline {
     options {
-    buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '5'))
-    //disableConcurrentBuilds()
-    //timeout(time: 1, unit: 'HOURS')
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '5'))
+        //disableConcurrentBuilds()
+        //timeout(time: 1, unit: 'HOURS')
     }
 
     tools {
@@ -19,16 +103,29 @@ pipeline {
     stages {
         stage('Clean Workspace') {
             steps {
+<<<<<<< HEAD
                 if (isUnix()) {
                     sh 'rm -rf playwright-report test-results allure-results' // clean workspace    
                 }
                 else {
                     bat 'del /s /q playwright-report test-results allure-results'
+=======
+                script {
+                    if (isUnix()) {
+                        sh 'rm -rf playwright-report test-results allure-results'
+                    } else {
+                        bat 'if exist playwright-report rmdir /s /q playwright-report'
+                        bat 'if exist test-results rmdir /s /q test-results'
+                        bat 'if exist allure-results rmdir /s /q allure-results'
+                    }
+>>>>>>> 1403bed90502719e464723956daf117f2797e706
                 }
             }
         }
+
         stage('Install Dependencies') {
             steps {
+<<<<<<< HEAD
                 if (isUnix()) {
                     echo "Installing npm dependencies..."
                     sh 'npm ci'
@@ -38,12 +135,24 @@ pipeline {
                     echo "Installing npm dependencies..."
                     bat 'bash -c "npm ci"'
                     bat 'bash -c "npx playwright install --with-deps"'
+=======
+                script {
+                    echo "Installing npm dependencies..."
+                    if (isUnix()) {
+                        sh 'npm ci'
+                        sh 'npx playwright install --with-deps'
+                    } else {
+                        bat 'npm ci'
+                        bat 'npx playwright install --with-deps'
+                    }
+>>>>>>> 1403bed90502719e464723956daf117f2797e706
                 }
             }
         }
 
         stage('Run Playwright Tests') {
             steps {
+<<<<<<< HEAD
                 if (isUnix()) {
                     echo "-----------------------------------------------------------------"
                     echo "Starting Playwright tests..."
@@ -55,6 +164,17 @@ pipeline {
                     echo "Starting Playwright tests..."
                     echo "-----------------------------------------------------------------"
                     bat 'bash -c "npx playwright test -g "@Login|@Read-json""'
+=======
+                script {
+                    echo "-----------------------------------------------------------------"
+                    echo "Starting Playwright tests..."
+                    echo "-----------------------------------------------------------------"
+                    if (isUnix()) {
+                        sh 'npx playwright test -g "@Login|@Read-json"'
+                    } else {
+                        bat 'npx playwright test -g "@Login|@Read-json"'
+                    }
+>>>>>>> 1403bed90502719e464723956daf117f2797e706
                 }
             }
         }
