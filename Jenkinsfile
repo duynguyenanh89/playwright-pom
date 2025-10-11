@@ -117,8 +117,8 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                echo "Installing npm dependencies..."
                 script {
+                    echo "Installing npm dependencies..."
                     if (isUnix()) {
                         sh 'npm ci'
                         sh 'npx playwright install --with-deps'
@@ -132,10 +132,10 @@ pipeline {
 
         stage('Run Playwright Tests') {
             steps {
-                echo "-----------------------------------------------------------------"
-                echo "Starting Playwright tests..."
-                echo "-----------------------------------------------------------------"
                 script {
+                    echo "-----------------------------------------------------------------"
+                    echo "Starting Playwright tests..."
+                    echo "-----------------------------------------------------------------"
                     if (isUnix()) {
                         sh 'npx playwright test -g "@Login|@Read-json"'
                     } else {
