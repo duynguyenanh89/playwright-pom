@@ -103,29 +103,17 @@ pipeline {
     stages {
         stage('Clean Workspace') {
             steps {
-<<<<<<< HEAD
                 if (isUnix()) {
                     sh 'rm -rf playwright-report test-results allure-results' // clean workspace    
                 }
                 else {
                     bat 'del /s /q playwright-report test-results allure-results'
-=======
-                script {
-                    if (isUnix()) {
-                        sh 'rm -rf playwright-report test-results allure-results'
-                    } else {
-                        bat 'if exist playwright-report rmdir /s /q playwright-report'
-                        bat 'if exist test-results rmdir /s /q test-results'
-                        bat 'if exist allure-results rmdir /s /q allure-results'
-                    }
->>>>>>> 1403bed90502719e464723956daf117f2797e706
                 }
             }
         }
 
         stage('Install Dependencies') {
             steps {
-<<<<<<< HEAD
                 if (isUnix()) {
                     echo "Installing npm dependencies..."
                     sh 'npm ci'
@@ -135,24 +123,12 @@ pipeline {
                     echo "Installing npm dependencies..."
                     bat 'bash -c "npm ci"'
                     bat 'bash -c "npx playwright install --with-deps"'
-=======
-                script {
-                    echo "Installing npm dependencies..."
-                    if (isUnix()) {
-                        sh 'npm ci'
-                        sh 'npx playwright install --with-deps'
-                    } else {
-                        bat 'npm ci'
-                        bat 'npx playwright install --with-deps'
-                    }
->>>>>>> 1403bed90502719e464723956daf117f2797e706
                 }
             }
         }
 
         stage('Run Playwright Tests') {
             steps {
-<<<<<<< HEAD
                 if (isUnix()) {
                     echo "-----------------------------------------------------------------"
                     echo "Starting Playwright tests..."
@@ -164,17 +140,6 @@ pipeline {
                     echo "Starting Playwright tests..."
                     echo "-----------------------------------------------------------------"
                     bat 'bash -c "npx playwright test -g "@Login|@Read-json""'
-=======
-                script {
-                    echo "-----------------------------------------------------------------"
-                    echo "Starting Playwright tests..."
-                    echo "-----------------------------------------------------------------"
-                    if (isUnix()) {
-                        sh 'npx playwright test -g "@Login|@Read-json"'
-                    } else {
-                        bat 'npx playwright test -g "@Login|@Read-json"'
-                    }
->>>>>>> 1403bed90502719e464723956daf117f2797e706
                 }
             }
         }
