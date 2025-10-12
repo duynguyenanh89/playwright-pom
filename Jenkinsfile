@@ -33,10 +33,10 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // cache(maxCacheSize: 500, caches: [
-                //     [$class: 'SimpleBuildCache', cacheDirectory: 'node_modules', cacheValidityPeriod: 7],
-                //     [$class: 'SimpleBuildCache', cacheDirectory: '~/.cache/ms-playwright', cacheValidityPeriod: 7]
-                // ]) {
+                cache(maxCacheSize: 500, caches: [
+                    [$class: 'SimpleBuildCache', cacheDirectory: 'node_modules', cacheValidityPeriod: 7],
+                    [$class: 'SimpleBuildCache', cacheDirectory: '~/.cache/ms-playwright', cacheValidityPeriod: 7]
+                ]) {
                     script {
                         echo "Installing npm dependencies..."
                         if (isUnix()) {
@@ -47,7 +47,7 @@ pipeline {
                             bat 'npx playwright install --with-deps'
                         }
                     }
-                // }
+                }
             }
         }
 
