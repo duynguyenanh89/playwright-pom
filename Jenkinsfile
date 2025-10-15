@@ -48,7 +48,7 @@ pipeline {
 
         stage('Setup Credentials') {
             steps {
-                withCredentials([file(credentialsId: 'my-credentials', variable: 'CREDENTIALS_FILE')]) {
+                withCredentials([file(credentialsId: 'credentials-json-file', variable: 'CREDENTIALS_FILE')]) {
                     script {
                         try {
                             if (isUnix()) {
