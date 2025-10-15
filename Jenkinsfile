@@ -56,10 +56,9 @@ pipeline {
                     script {
                         try {
                             if (isUnix()) {
-                                // Ensure workspace has write permissions
-                                sh 'chmod 755 $WORKSPACE'
+                                sh 'echo "Copying credentials file..."'
+                                sh 'chmod -R u+w data'
                                 sh 'cp $CREDENTIALS_FILE ${WORKSPACE}/data/credentials.json'
-                                sh 'chmod 600 $WORKSPACE/credentials.json' // Secure permissions
                             } else {
                                 bat 'copy "%CREDENTIALS_FILE%" ${WORKSPACE}/data/credentials.json'
                             }
