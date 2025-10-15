@@ -12,8 +12,10 @@
     "rootDir": "./",
     "baseUrl": ".",
     "paths": {
-      "@page/*": ["pages/*"],
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@/pages/*": ["./pages/*"],
+      "@/data/*": ["./data/*"],
+      "@/tests/*": ["./tests/*"]
     },
     "types": [
       "node",
