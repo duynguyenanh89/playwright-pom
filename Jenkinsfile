@@ -60,9 +60,10 @@ pipeline {
                                 sh 'chmod -R u+w data'
                                 sh 'cp $CREDENTIALS_FILE ${WORKSPACE}/data/credentials.json'
                             } else {
-                                bat 'copy "%CREDENTIALS_FILE%" ${WORKSPACE}/data/credentials.json'
+                                bat 'echo Copying credentials file...'
+                                bat 'icacls data /grant Everyone:F /T'  // Grants full access recursively (equivalent to chmod -R u+w); adjust permissions as needed for security
+                                bat 'copy %CREDENTIALS_FILE% %WORKSPACE%\\data\\credentials.json'
                             }
-                            echo "✅ Credentials copied successfully"
                         } catch (Exception e) {
                             error "❌ Failed to copy credentials: ${e.getMessage()}"
                         }
