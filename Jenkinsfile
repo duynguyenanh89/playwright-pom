@@ -50,6 +50,16 @@ pipeline {
             }
         }
 
+        stage('Setup Permissions') {
+            steps {
+                //Fix permissions on existing data folder
+                sh 'sudo chown -R $(whoami):$(whoami) data/'
+                sh 'sudo chmod -R 755 data/'
+                // Or more permissive for Jenkins
+                sh 'sudo chmod -R 775 data/'
+            }
+        }
+
         stage('Setup Credentials') {
             steps {
                 withCredentials([file(credentialsId: 'credentials-json-file', variable: 'CREDENTIALS_FILE')]) {
