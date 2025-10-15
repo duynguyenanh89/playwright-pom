@@ -8,5 +8,5 @@ node_modules/
 /playwright/.auth/
 /allure-results/
 /allure-report/
-/credentials.json
+/data/credentials.json
 
