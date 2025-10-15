@@ -52,9 +52,9 @@ pipeline {
                     script {
                         try {
                             if (isUnix()) {
-                                sh 'cp $CREDENTIALS_FILE credentials.json'
+                                sh 'cp $CREDENTIALS_FILE data/credentials.json'
                             } else {
-                                bat 'copy "%CREDENTIALS_FILE%" credentials.json'
+                                bat 'copy "%CREDENTIALS_FILE%" data/credentials.json'
                             }
                             echo "✅ Credentials copied successfully"
                         } catch (Exception e) {
