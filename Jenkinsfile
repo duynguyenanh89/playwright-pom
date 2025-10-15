@@ -50,23 +50,16 @@ pipeline {
             }
         }
 
-        stage('Setup Permissions') {
-            steps {
-                //Fix permissions on existing data folder
-                sh 'sudo chown -R $(whoami):$(whoami) data/'
-                sh 'sudo chmod -R 755 data/'
-                // Or more permissive for Jenkins
-                sh 'sudo chmod -R 775 data/'
-            }
-        }
-
         stage('Setup Credentials') {
             steps {
                 withCredentials([file(credentialsId: 'credentials-json-file', variable: 'CREDENTIALS_FILE')]) {
                     script {
                         try {
                             if (isUnix()) {
+                                // Ensure workspace has write permissions
+                                sh 'chmod 755 $WORKSPACE'
                                 sh 'cp $CREDENTIALS_FILE ${WORKSPACE}/data/credentials.json'
+                                sh 'chmod 600 $WORKSPACE/credentials.json' // Secure permissions
                             } else {
                                 bat 'copy "%CREDENTIALS_FILE%" ${WORKSPACE}/data/credentials.json'
                             }
