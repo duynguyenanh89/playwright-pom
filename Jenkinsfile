@@ -46,22 +46,27 @@ pipeline {
             }
         }
 
-        stage('Run Playwright Tests') {
+        stage('Setup Credentials') {
             steps {
-                withCredentials([file(credentialsId: 'credentials-json', variable: 'CREDENTIALS_FILE')]) {
-                    try {
-                        if (isUnix()) {
-                            sh 'cp $CREDENTIALS_FILE credentials.json'
-                        } else {
-                            bat 'copy "%CREDENTIALS_FILE%" credentials.json'
+                withCredentials([file(credentialsId: 'my-credentials', variable: 'CREDENTIALS_FILE')]) {
+                    script {
+                        try {
+                            if (isUnix()) {
+                                sh 'cp $CREDENTIALS_FILE credentials.json'
+                            } else {
+                                bat 'copy "%CREDENTIALS_FILE%" credentials.json'
+                            }
+                            echo "✅ Credentials copied successfully"
+                        } catch (Exception e) {
+                            error "❌ Failed to copy credentials: ${e.getMessage()}"
                         }
-                        echo "✅ Credentials file copied successfully"
-                    } catch (Exception e) {
-                        error "❌ Failed to copy credentials: ${e.getMessage()}"
-                        return
                     }
                 }
-                
+            }
+        }
+
+        stage('Run Playwright Tests') {
+            steps {
                 script {
                     echo "-----------------------------------------------------------------"
                     echo "Starting Playwright tests..."
