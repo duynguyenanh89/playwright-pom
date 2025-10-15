@@ -1,4 +1,10 @@
 pipeline {
+    agent any
+    parameters {
+        string(name: 'PLAYWRIGHT_TAGS', defaultValue: '@Login|@Read-json|@Example', description: 'Playwright tags to run')
+        string(name: 'WORKERS', defaultValue: '4', description: 'Number of workers')
+    }
+
     options {
         buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '5'))
         //disableConcurrentBuilds()
@@ -13,8 +19,6 @@ pipeline {
         PATH = "/usr/local/bin:$PATH"
         DEBUG = '' // Disable verbose Playwright logging
     }
-
-    agent any
 
     stages {
         stage('Clean Workspace') {
@@ -69,12 +73,12 @@ pipeline {
             steps {
                 script {
                     echo "-----------------------------------------------------------------"
-                    echo "Starting Playwright tests..."
+                    echo "Starting Playwright tests with tags: ${params.PLAYWRIGHT_TAGS}"
                     echo "-----------------------------------------------------------------"
                     if (isUnix()) {
-                        sh 'npx playwright test -g "@Login|@Read-json" --workers=4'
+                        sh "npx playwright test -g \"${params.PLAYWRIGHT_TAGS}\" --workers=${params.WORKERS}"
                     } else {
-                        bat 'npx playwright test -g "@Login|@Read-json" --workers=4'
+                        bat "npx playwright test -g \"${params.PLAYWRIGHT_TAGS}\" --workers=${params.WORKERS}"
                     }
                 }
             }
