@@ -56,7 +56,9 @@ pipeline {
                     script {
                         try {
                             if (isUnix()) {
-                                sh 'cp $CREDENTIALS_FILE data/credentials.json'
+                                sh 'cp "$CREDENTIALS_FILE" data/credentials.json && echo "✅ Credentials copied successfully" || (echo "❌ Copy failed" && exit 1)'
+                                // Set secure permissions
+                                sh 'chmod 600 data/credentials.json'
                             } else {
                                 bat 'copy "%CREDENTIALS_FILE%" data/credentials.json'
                             }
