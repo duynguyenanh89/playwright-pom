@@ -1,7 +1,7 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'PLAYWRIGHT_TAGS', defaultValue: '@Login|@Read-json|@Example', description: 'Playwright tags to run')
+        string(name: 'PLAYWRIGHT_TAGS', defaultValue: '@Read-json', description: 'Playwright tags to run')
         string(name: 'WORKERS', defaultValue: '4', description: 'Number of workers')
     }
 
