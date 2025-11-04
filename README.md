@@ -5,11 +5,9 @@ This is a Playwright project for automated testing, supporting multiple environm
 
 ## Project Structure
 playwright-project/
-├── config/
-│   ├── accounts/
-│   │   ├── account.json
-│   ├── env/
-│   │   ├── test.json
+├── data/
+│   ├── credentials.json
+│   ├── urls.json
 ├── files/
 │   ├── sample.pdf
 │   ├── image.png
