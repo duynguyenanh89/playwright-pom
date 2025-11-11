@@ -4,11 +4,12 @@ import credentials from '@/data/credentials.json';
 
 
 test.describe('Public API-v10: @PublicAPI ', () => {
+
   test('[Public API] Create an IMMEDIATE booking', async ({ request }) => {
     await createImmediateBookingPublicAPI(request, credentials.apiAuthorization['apiAuthorization-daniel-01'].apiAuthorization);
   });
 
-  test('[Public API] Create an SCHEDULE booking', async ({ request }) => {
+  test('[Public API] Create a SCHEDULE booking', async ({ request }) => {
     await createScheduleBookingPublicAPI(request, credentials.apiAuthorization['apiAuthorization-daniel-01'].apiAuthorization);
   });
 
