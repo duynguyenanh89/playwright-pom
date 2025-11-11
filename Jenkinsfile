@@ -104,7 +104,7 @@ pipeline {
                     //def message = """{"text": "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}"\nBuild URL: ${env.BUILD_URL}\nRepository: ${env.GIT_URL}}"""
                     def message = 
                     """
-                    {"text": "Build SUCCESSFUL: #Job Name: ${env.JOB_NAME} #Build number: ${env.BUILD_NUMBER}"}
+                    {"text": "Build SUCCESSFUL: \nJob Name: ${env.JOB_NAME} \nBuild number: ${env.BUILD_NUMBER}"}
                     """
                     httpRequest contentType: 'APPLICATION_JSON',
                                 httpMode: 'POST',
@@ -121,7 +121,7 @@ pipeline {
                     //def message = """{"text": "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}"\nBuild URL: ${env.BUILD_URL}\nRepository: ${env.GIT_URL}}"""
                     def message = 
                     """
-                    {"text": "Build FAILED: #Job Name: ${env.JOB_NAME} #Build number: ${env.BUILD_NUMBER}"}
+                    {"text": "Build FAILED: \nJob Name: ${env.JOB_NAME} \nBuild number: ${env.BUILD_NUMBER}"}
                     """
                     httpRequest contentType: 'APPLICATION_JSON',
                                 httpMode: 'POST',
