@@ -3,7 +3,7 @@ import { createImmediateBookingPublicAPI, createScheduleBookingPublicAPI } from 
 import credentials from '@/data/credentials.json';
 
 
-test.describe(`Public API-v10: `, () => {
+test.describe('Public API-v10: @PublicAPI ', () => {
   test('[Public API] Create an IMMEDIATE booking', async ({ request }) => {
     await createImmediateBookingPublicAPI(request, credentials.apiAuthorization['apiAuthorization-daniel-01'].apiAuthorization);
   });
