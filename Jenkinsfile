@@ -121,7 +121,7 @@ pipeline {
                     //def message = """{"text": "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}"\nBuild URL: ${env.BUILD_URL}\nRepository: ${env.GIT_URL}}"""
                     def message = 
                     """
-                    {"text": "Build FAILED: $#Job Name: ${env.JOB_NAME} #Build number: ${env.BUILD_NUMBER}"}
+                    {"text": "Build FAILED: #Job Name: ${env.JOB_NAME} #Build number: ${env.BUILD_NUMBER}"}
                     """
                     httpRequest contentType: 'APPLICATION_JSON',
                                 httpMode: 'POST',
