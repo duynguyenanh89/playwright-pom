@@ -101,7 +101,12 @@ pipeline {
         success {
             withCredentials([string(credentialsId: 'google-chat-webhook', variable: 'WEBHOOK_URL')]) {
                 script {
-                    def message = """{"text": "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}"""
+                    def message = 
+                    """
+                    {"text": "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}
+                    Build URL: ${env.BUILD_URL}
+                    Repository: ${env.GIT_URL}
+                    """
                     httpRequest contentType: 'APPLICATION_JSON',
                                 httpMode: 'POST',
                                 requestBody: message,
@@ -114,7 +119,12 @@ pipeline {
         failure {
             withCredentials([string(credentialsId: 'google-chat-webhook', variable: 'WEBHOOK_URL')]) {
                 script {
-                    def message = """{"text": "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}"""
+                    def message = 
+                    """
+                    {"text": "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}
+                    Build URL: ${env.BUILD_URL}
+                    Repository: ${env.GIT_URL}
+                    """
                     httpRequest contentType: 'APPLICATION_JSON',
                                 httpMode: 'POST',
                                 requestBody: message,
