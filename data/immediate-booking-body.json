@@ -1,0 +1,47 @@
+{
+    "vehicle_type_id": 27,
+    "booking_payment_type": "cash",
+    "note": "Please be careful!",
+    "time_type": "now",
+    "job_order_number": "DLVR-0001",
+    "allow_parking_fees": true,
+    "allow_tolls_fees": true,
+    "allow_waiting_time_fees": true,
+    "send_first_to_driver": true,
+    "marked_as_favorite": true,
+    "locations": [
+        {
+            "address": "1/1 Hoàng Việt, Phường 4, Tân Bình, Hồ Chí Minh, Vietnam",
+            "latitude": 10.797450811583685,
+            "longitude": 106.65946646794323,
+            "recipient_name": "Daniel",
+            "recipient_phone": "+84973620008",
+            "note": "This is the Pickup location - DLVR Viet Nam",
+            "need_pod": false,
+            "is_payer": true
+        },
+        {
+            "address": "720A Đ. Điện Biên Phủ, Vinhomes Tân Cảng, Bình Thạnh, Hồ Chí Minh 72300, Vietnam",
+            "latitude": 10.795241537223575,
+            "longitude": 106.721813685404,
+            "recipient_name": "Duke",
+            "recipient_phone": "+84973620009",
+            "note": "This is the Drop-off 1 - Vin Homes",
+            "need_pod": false
+        }
+    ],
+    "require_signatures": true,
+    "extra_services": [
+        {
+            "extra_requirement_id": 8794,
+            "selected_amount": 1
+        },
+        {
+            "extra_requirement_id": 9110,
+            "selected_amount": 1
+        }
+    ],
+    "estimate_transit_times_attributes": [],
+    "discount_code": "dlvr50",
+    "booking_location_tracking_attributes": null
+}
