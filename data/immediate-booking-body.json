@@ -1,6 +1,6 @@
 {
     "vehicle_type_id": 27,
-    "booking_payment_type": "cash",
+    "booking_payment_type": "credit",
     "note": "Please be careful!",
     "time_type": "now",
     "job_order_number": "DLVR-0001",
