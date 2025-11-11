@@ -104,11 +104,7 @@ pipeline {
                     def message = 
                     """{
                         "text":
-                        "Build *SUCCESSFUL*\\n" + 
-                        "Job Name: ${env.JOB_NAME}\\n" +
-                        "Build number: ${env.BUILD_NUMBER}\\n" +
-                        "Build URL: ${env.BUILD_URL}\\n" + 
-                        "Repository: ${env.GIT_URL}"
+                        "Build *SUCCESSFULLY* \nJob Name: ${env.JOB_NAME} \nBuild number: ${env.BUILD_NUMBER} \nBuild URL: ${env.BUILD_URL} \nRepository: ${env.GIT_URL}"
                     }"""
                     httpRequest contentType: 'APPLICATION_JSON',
                                 httpMode: 'POST',
