@@ -103,11 +103,14 @@ pipeline {
                 script {
                     //def message = """{"text": "Build SUCCESSFUL: ${env.JOB_NAME} #${env.BUILD_NUMBER}"\nBuild URL: ${env.BUILD_URL}\nRepository: ${env.GIT_URL}}"""
                     def message = 
-                    """
-                    {"text": "Build SUCCESSFUL: 
-                    Job Name: ${env.JOB_NAME} 
-                    Build number: ${env.BUILD_NUMBER}"}
-                    """
+                    """{
+                        "text":
+                        "Build SUCCESSFUL: 
+                        Job Name: ${env.JOB_NAME} 
+                        Build number: ${env.BUILD_NUMBER}
+                        Build URL: ${env.BUILD_URL}
+                        Repository: ${env.GIT_URL}"
+                    }"""
                     httpRequest contentType: 'APPLICATION_JSON',
                                 httpMode: 'POST',
                                 requestBody: message,
@@ -122,11 +125,14 @@ pipeline {
                 script {
                     //def message = """{"text": "Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}"\nBuild URL: ${env.BUILD_URL}\nRepository: ${env.GIT_URL}}"""
                     def message = 
-                    """
-                    {"text": "Build FAILED: 
-                    Job Name: ${env.JOB_NAME} 
-                    Build number: ${env.BUILD_NUMBER}"}
-                    """
+                    """{
+                        "text":
+                        "Build FAILED:
+                        Job Name: ${env.JOB_NAME} 
+                        Build number: ${env.BUILD_NUMBER}
+                        Build URL: ${env.BUILD_URL}
+                        Repository: ${env.GIT_URL}"
+                    }"""
                     httpRequest contentType: 'APPLICATION_JSON',
                                 httpMode: 'POST',
                                 requestBody: message,
