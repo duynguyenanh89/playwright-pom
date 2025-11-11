@@ -106,7 +106,7 @@ pipeline {
                         "text":
                         "Build *SUCCESSFUL*\\n" + 
                         "Job Name: ${env.JOB_NAME}\\n" +
-                        "Build number: ${env.BUILD_NUMBER}\\n +
+                        "Build number: ${env.BUILD_NUMBER}\\n" +
                         "Build URL: ${env.BUILD_URL}\\n" + 
                         "Repository: ${env.GIT_URL}"
                     }"""
