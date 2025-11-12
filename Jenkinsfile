@@ -104,7 +104,7 @@ pipeline {
                     def message = 
                     """{
                         "text":
-                        "Build *SUCCESSFULLY* \nBranch: ${env.GIT_BRANCH} \nCommit Message: ${env.GIT_COMMIT_MSG} \nJob Name: ${env.JOB_NAME} \nBuild Number: ${env.BUILD_NUMBER} \nBuild URL: ${env.BUILD_URL} \nRepository: ${env.GIT_URL} "
+                        "Build *SUCCESSFULLY* \nBranch: ${env.GIT_BRANCH} \nCommit Message: ${GIT_COMMIT_MSG} \nJob Name: ${env.JOB_NAME} \nBuild Number: ${env.BUILD_NUMBER} \nBuild URL: ${env.BUILD_URL} \nRepository: ${env.GIT_URL} "
                     }"""
                     httpRequest contentType: 'APPLICATION_JSON',
                                 httpMode: 'POST',
@@ -121,7 +121,7 @@ pipeline {
                     def message = 
                     """{
                         "text":
-                        "Build *FAILED* \nBranch: ${env.GIT_BRANCH} \nCommit Message: ${env.GIT_COMMIT_MSG} \nJob Name: ${env.JOB_NAME} \nBuild Number: ${env.BUILD_NUMBER} \nBuild URL: ${env.BUILD_URL} \nRepository: ${env.GIT_URL} "
+                        "Build *FAILED* \nBranch: ${env.GIT_BRANCH} \nCommit Message: ${GIT_COMMIT_MSG} \nJob Name: ${env.JOB_NAME} \nBuild Number: ${env.BUILD_NUMBER} \nBuild URL: ${env.BUILD_URL} \nRepository: ${env.GIT_URL} "
                     }"""
                     httpRequest contentType: 'APPLICATION_JSON',
                                 httpMode: 'POST',
