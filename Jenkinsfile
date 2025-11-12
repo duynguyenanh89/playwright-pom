@@ -103,8 +103,13 @@ pipeline {
                 script {
                     def message = 
                     """{
-                        "text":
-                        "Build *SUCCESSFULLY* \nJob Name: ${env.JOB_NAME} \nBuild Number: ${env.BUILD_NUMBER} \nBuild URL: ${env.BUILD_URL} \nRepository: ${env.GIT_URL}"
+                        "text": "Build *SUCCESSFULLY*\\n" +
+                                "Job: ${env.JOB_NAME}\\n" +
+                                "Build #: ${env.BUILD_NUMBER}\\n" +
+                                "Branch: ${gitBranch}\\n" +
+                                "Commit: ${commitHash}\\n" +
+                                "Message: ${commitMsg.take(200)}${commitMsg.length()>200?'…':''}\\n" +
+                                "URL: ${env.BUILD_URL}"
                     }"""
                     httpRequest contentType: 'APPLICATION_JSON',
                                 httpMode: 'POST',
@@ -118,10 +123,15 @@ pipeline {
         failure {
             withCredentials([string(credentialsId: 'google-chat-webhook', variable: 'WEBHOOK_URL')]) {
                 script {
-                    def message = 
+                   def message = 
                     """{
-                        "text":
-                        "Build *FAILED* \nJob Name: ${env.JOB_NAME} \nBuild Number: ${env.BUILD_NUMBER} \nBuild URL: ${env.BUILD_URL} \nRepository: ${env.GIT_URL}"
+                        "text": "Build *SUCCESSFULLY*\\n" +
+                                "Job: ${env.JOB_NAME}\\n" +
+                                "Build #: ${env.BUILD_NUMBER}\\n" +
+                                "Branch: ${gitBranch}\\n" +
+                                "Commit: ${commitHash}\\n" +
+                                "Message: ${commitMsg.take(200)}${commitMsg.length()>200?'…':''}\\n" +
+                                "URL: ${env.BUILD_URL}"
                     }"""
                     httpRequest contentType: 'APPLICATION_JSON',
                                 httpMode: 'POST',
