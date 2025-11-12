@@ -101,6 +101,12 @@ pipeline {
         success {
             withCredentials([string(credentialsId: 'google-chat-webhook', variable: 'WEBHOOK_URL')]) {
                 script {
+                    def GIT_COMMIT_MSG
+                    if (isUnix()) {
+                        GIT_COMMIT_MSG = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                    } else {
+                        GIT_COMMIT_MSG = bat(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                    }
                     def message = 
                     """{
                         "text":
@@ -118,6 +124,12 @@ pipeline {
         failure {
             withCredentials([string(credentialsId: 'google-chat-webhook', variable: 'WEBHOOK_URL')]) {
                 script {
+                    def GIT_COMMIT_MSG
+                    if (isUnix()) {
+                        GIT_COMMIT_MSG = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                    } else {
+                        GIT_COMMIT_MSG = bat(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                    }
                     def message = 
                     """{
                         "text":
