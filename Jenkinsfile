@@ -103,9 +103,9 @@ pipeline {
                 script {
                     def GIT_COMMIT_MSG
                     if (isUnix()) {
-                        GIT_COMMIT_MSG = sh "git log -1 --pretty=%B"
+                        GIT_COMMIT_MSG = sh "git log -1"
                     } else {
-                        GIT_COMMIT_MSG = bat "git log -1 --pretty=%B"
+                        GIT_COMMIT_MSG = bat "git log -1"
                     }
 
                     def message = 
@@ -127,9 +127,9 @@ pipeline {
                 script {
                     def GIT_COMMIT_MSG
                     if (isUnix()) {
-                        GIT_COMMIT_MSG = sh "git log -1 --pretty=%B"
+                        GIT_COMMIT_MSG = sh "git log -1"
                     } else {
-                        GIT_COMMIT_MSG = bat "git log -1 --pretty=%B"
+                        GIT_COMMIT_MSG = bat "git log -1"
                     }
 
                     def message = 
