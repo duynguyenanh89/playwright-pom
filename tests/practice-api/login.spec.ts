@@ -1,10 +1,10 @@
 import { test } from '@playwright/test';
-import { registerPracticeAPI, loginPracticeAPI, registerPracticeAPIRandomEmail } from '@/utils/apiHelper';
+import { registerPracticeAPI, loginPracticeAPI, registerPracticeAPIRandomEmail, loginPracticeAPIParams } from '@/utils/apiHelper';
 
 
 test.describe('Practice API: @PracticeAPI ', () => {
     test('[PracticeAPI] Register a new account', async ({ request }) => {
-        await registerPracticeAPI(request, 'tester0002', 'tester0002@gmail.com', '123456');
+        await registerPracticeAPI(request, 'tester0003', 'tester0003@gmail.com', '123456');
     });
 
     test('[PracticeAPI] Register a new account with random email', async ({ request }) => {
@@ -13,6 +13,10 @@ test.describe('Practice API: @PracticeAPI ', () => {
 
     test('[PracticeAPI] Login to get token', async ({ request }) => {
         await loginPracticeAPI(request);
+    });
+
+    test('[PracticeAPI] Login with Params to get token', async ({ request }) => {
+        await loginPracticeAPIParams(request, 'tester0002@gmail.com','123456');
     });
 
 });

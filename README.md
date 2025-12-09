@@ -59,10 +59,18 @@ playwright-project/
 ├── README.md
 └── playwright.config.ts
 
+
+## install supported browsers
+  `npx playwright install`
+
+## Check playwright version
+  `npx playwright --version`
+
+## Install Playwright latest version
+  `npm install playwright@latest`
+
 ## Add dependency and install browsers.
   `npm i -D @playwright/test`
-  # install supported browsers
-  `npx playwright install`
 
 
 ## Running with Environments
