@@ -70,6 +70,7 @@ export async function registerPracticeAPI(request: APIRequestContext, username: 
 
   const responseBody = await response.json();
   console.log('--------------------------------------------');
+  console.log('Register a new account with the existing username on the system: ' + username + ', email: ' + email);
   console.log('Status Code:', response.status());
   console.log('Response Body:', responseBody);
   console.log('--------------------------------------------');
@@ -95,6 +96,7 @@ export async function registerPracticeAPIRandomEmail(request: APIRequestContext)
 
   const responseBody = await response.json();
   console.log('--------------------------------------------');
+  console.log('Register Practice API with Random Email: ' + email + '@gmail.com');
   console.log('Status Code:', response.status());
   console.log('Response Body:', responseBody);
   console.log('--------------------------------------------');
@@ -119,6 +121,7 @@ export async function loginPracticeAPI(request: APIRequestContext) {
 
   const responseBody = await response.json();
   console.log('--------------------------------------------');
+  console.log('Login to Practice API with Email from Data file:');
   console.log('Status Code:', response.status());
   console.log('Response Body:', responseBody);
 
@@ -126,8 +129,8 @@ export async function loginPracticeAPI(request: APIRequestContext) {
   expect(responseBody).toHaveProperty('success');
   const email = responseBody.data.email;
   const token = responseBody.data.token;
-  console.log('Login to practice API: ' + email);
-  console.log('Login to practice API token: ' + token);
+  console.log('Login to Practice API with Email: ' + email);
+  console.log('Login to Practice API (Token of Account): ' + token);
   console.log('--------------------------------------------');
   return token;
 }
@@ -147,6 +150,7 @@ export async function loginPracticeAPIParams(request: APIRequestContext, usernam
 
   const responseBody = await response.json();
   console.log('--------------------------------------------');
+  console.log('Login to Practice API with Email from User input when calling function:');
   console.log('Status Code:', response.status());
   console.log('Response Body:', responseBody);
 
@@ -154,8 +158,8 @@ export async function loginPracticeAPIParams(request: APIRequestContext, usernam
   expect(responseBody).toHaveProperty('success');
   const email = responseBody.data.email;
   const token = responseBody.data.token;
-  console.log('Login to practice API: ' + email);
-  console.log('Login to practice API token: ' + token);
+  console.log('Login to Practice API with Email: ' + email);
+  console.log('Login to Practice API (Token of Account): ' + token);
   console.log('--------------------------------------------');
   return token;
 }
