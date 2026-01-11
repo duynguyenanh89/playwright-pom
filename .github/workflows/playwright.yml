@@ -89,30 +89,30 @@ jobs:
           retention-days: 14
 
       # ── Notify Google Chat ───────────────────────────────────────
-      - name: Notify Google Chat (Success)
-        if: success()
-        uses: google-github-actions/send-google-chat-webhook@v2
-        with:
-          url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
-          message: |
-            **Build SUCCESSFULLY** 🎉
-            Branch: ${{ github.ref_name }}
-            Commit: ${{ github.event.head_commit.message || github.event.pull_request.title }}
-            Workflow: ${{ github.workflow }}
-            Run: ${{ github.run_id }}
-            Repository: ${{ github.repository }}
-            URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      # - name: Notify Google Chat (Success)
+      #   if: success()
+      #   uses: google-github-actions/send-google-chat-webhook@v2
+      #   with:
+      #     url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+      #     message: |
+      #       **Build SUCCESSFULLY** 🎉
+      #       Branch: ${{ github.ref_name }}
+      #       Commit: ${{ github.event.head_commit.message || github.event.pull_request.title }}
+      #       Workflow: ${{ github.workflow }}
+      #       Run: ${{ github.run_id }}
+      #       Repository: ${{ github.repository }}
+      #       URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-      - name: Notify Google Chat (Failure)
-        if: failure()
-        uses: google-github-actions/send-google-chat-webhook@v2
-        with:
-          url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
-          message: |
-            **Build FAILED** ❌
-            Branch: ${{ github.ref_name }}
-            Commit: ${{ github.event.head_commit.message || github.event.pull_request.title }}
-            Workflow: ${{ github.workflow }}
-            Run: ${{ github.run_id }}
-            Repository: ${{ github.repository }}
-            URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      # - name: Notify Google Chat (Failure)
+      #   if: failure()
+      #   uses: google-github-actions/send-google-chat-webhook@v2
+      #   with:
+      #     url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+      #     message: |
+      #       **Build FAILED** ❌
+      #       Branch: ${{ github.ref_name }}
+      #       Commit: ${{ github.event.head_commit.message || github.event.pull_request.title }}
+      #       Workflow: ${{ github.workflow }}
+      #       Run: ${{ github.run_id }}
+      #       Repository: ${{ github.repository }}
+      #       URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
